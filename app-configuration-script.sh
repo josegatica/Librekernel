@@ -824,6 +824,7 @@ sysctl -p > /dev/null
 
 cat << EOF > /etc/rc.local
 #!/bin/sh
+setterm -blank 0
 
 iptables -X
 iptables -F
