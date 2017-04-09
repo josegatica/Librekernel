@@ -67,21 +67,28 @@ chmod +x app-installation-script.sh
 }
 
 do_configuration() {
+RED='\033[0;31m'
+NC='\033[0m'
+success=$(cat /var/libre_install.log | grep "Installation completed")
+if [ ${#success} -gt 5 ]; then
+ # -----------------------------------------------
+ # Configuration part
+ # -----------------------------------------------   
 
-# -----------------------------------------------
-# Configuration part
-# -----------------------------------------------   
-
-echo "Downloading configuration script ..." | tee /var/libre_setup.log
-wget --no-check-certificate https://raw.githubusercontent.com/Librerouter/Librekernel/gh-pages/app-configuration-script.sh
-if [ $? -ne 0 ]; then
+ echo "Downloading configuration script ..." | tee /var/libre_setup.log
+ wget --no-check-certificate https://raw.githubusercontent.com/Librerouter/Librekernel/gh-pages/app-configuration-script.sh
+ if [ $? -ne 0 ]; then
         echo "Unable to download configuration script. Exiting ..." | tee /var/libre_setup.log
         git_commit
         exit 1
+ fi
+ echo "Running configuraiton script" | tee /var/libre_setup.log
+ chmod +x app-configuration-script.sh
+ ./app-configuration-script.sh
+else
+ echo -e "${RED}Installation failed. Please check log /var/libre_install.log.${NC}"
 fi
-echo "Running configuraiton script" | tee /var/libre_setup.log
-chmod +x app-configuration-script.sh
-./app-configuration-script.sh
+
 
 }
 
