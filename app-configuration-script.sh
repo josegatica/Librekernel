@@ -7040,7 +7040,7 @@ shutdown -r +1 &
 }
 
 remove_console_blanking() {
-  n_kbd=$(cat /etc/init.d/kbd | sed -e "s/\#\!\/bin\/sh/\#\!\/bin\/sh\nBLANK_TIME=\"0\"\nPOWERDOWN_TIME=\"0\"/")
+  n_kbd=$(cat /etc/init.d/kbd | sed -e "s/\#\!\/bin\/sh/\#\!\/bin\/sh\nBLANK_TIME=\"0\"\nPOWERDOWN_TIME=\"0\"\nBLANK_DPMS=\"0\ª/")
   echo "$n_kbd" > /etc/init.d/kbd
 }
 
