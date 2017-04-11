@@ -7039,6 +7039,13 @@ shutdown -r +1 &
 #done
 }
 
+remove_console_blanking() {
+  n_kbd=$(cat /etc/init.d/kbd | sed -e "s/\#\!\/bin\/sh/\#\!\/bin\/sh\nBLANK_TIME=\"0\"\nPOWERDOWN_TIME=\"0\"/")
+  echo "$n_kbd" > /etc/init.d/kbd
+}
+
+
+
 
 # ---------------------------------------------------------
 # ************************ MAIN ***************************
@@ -7122,6 +7129,7 @@ configure_arp			# Function to configure defense against ARP Spoofing
 add_warning_pages		# Added warning pages for clamav and squidguard
 print_services			# Print info about service accessibility
 create_commands                 # Create configs and logs commands
+remove_console_blanking         # Force console blanking and power save=0
 do_reboot                       # Function to reboot librerouter
 
 #configure_blacklists		# Configuring blacklist to block some ip addresses
