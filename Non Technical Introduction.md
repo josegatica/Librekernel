@@ -58,7 +58,7 @@ Grate. In our technical explanation you can delve into the details. You can find
 The services of Libre Router have been defined by the set of the following technical attributes:
 
 1. Secure **open operating system** with the hardened version based on Debian Libre and LFS. 
-2. Decentralization of the services you consume from the cloud at local alternatives (making it impossible to apply big data enemy corps.)
+2. Decentralisation of the services you consume from the cloud at local alternatives (making it impossible to apply big data enemy corps.)
 3. **Decentralisation and anonymisation of Search Engine** with admin rights.
 4. **Filter-connection for the Social Networks** in one single place using decentralized social network Friendica.
 5. **Decentralisation of video conferences** based in XMPPoverTOR or WebRTC.
@@ -75,11 +75,11 @@ The services of Libre Router have been defined by the set of the following techn
 
 ***1. Decentralised collaboration storage system - Based in OwnCloud***
 
-Libre Router offers decentralised collaboration to share your files with friends, business partners or another people being automatically protected and anonymous. With only one click, the downloading starts from your home community anonymously allowing online **collaborative editing**, **fileshare** or **backup of your mobile photos** in your community grid. 
+Libre Router offers decentralised collaboration to share your files with friends, business partners or another people being automatically protected and anonymous. With only one click, the files downloading starts anonymously allowing online **collaborative editing**, **fileshare** or **backup of your mobile photos** in your community grid. 
 
 ***2. Decentralised anonymous search engine with admin rights - Based in YaCy***
 
-With Libre Router you are the administrator of your search engine giving you full power. You can blacklist undesirable content, give relevance to your favourite websites and, the best part, nobody tracks your search engine search.
+With Libre Router you are the administrator of your search engine giving you full power. You can blacklist undesirable content, give relevance to your favourite websites and, the best part, **nobody tracks your search**.
 
 ![data center or decent-ralization](https://github.com/Librerouter/Librekernel/blob/gh-pages/images/11-12_v2.png)
 
