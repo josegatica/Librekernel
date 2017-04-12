@@ -2782,7 +2782,7 @@ if [ "$PROCESSOR" = "Intel" -o "$PROCESSOR" = "AMD" -o "$PROCESSOR" = "ARM" ]; t
         install_dialog           # This is the dialog, used for wizard.sh user menus
         install_wpa              # Install wpasupplicant required to connect to AP
 
-        echo "Installaation completed." | tee -a /var/libre_install.log
+        echo "Installation completed." | tee -a /var/libre_install.log
 fi
 
 # ---------------------------------------------
