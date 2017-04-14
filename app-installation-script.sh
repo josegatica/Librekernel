@@ -515,8 +515,8 @@ elif [ $PLATFORM = "D8" ]; then
         php5-common php5-fpm php5-cli php5-json php5-mysql \
         php5-curl php5-intl php5-mcrypt php5-memcache \
         php-xml-parser php-pear phpmyadmin php5 mailutils \
-        apache2- apache2-mpm-prefork- apache2-utils- apache2.2-bin- \
-        apache2.2-common- rpcbind- exim4- \
+        apache2 libapache2-mod-php5 libapache2-modsecurity \
+        rpcbind- exim4- \
         openjdk-7-jre-headless uwsgi \
         php5-gd php5-imap smarty3 git ntpdate macchanger \
         bridge-utils hostapd librrd-dev \
@@ -1064,9 +1064,9 @@ install_certificates()
         fi
 
         # Moving certificates to nginx directory
-        rm -rf /etc/ssl/nginx/*
-	mkdir -p /etc/ssl/nginx/
-        cp -r certs/* /etc/ssl/nginx/
+        rm -rf /etc/ssl/apache/*
+	mkdir -p /etc/ssl/apache/
+        cp -r certs/* /etc/ssl/apache/
 
         # Cleanup
         # rm -rf certs
@@ -2747,9 +2747,9 @@ if [ "$PROCESSOR" = "Intel" -o "$PROCESSOR" = "AMD" -o "$PROCESSOR" = "ARM" ]; t
 	install_packages       	 # Download and install packages	
 #	install_libressl	 # Install Libressl package
 	install_modsecurity      # Install modsecurity package
-#	install_waffle		 # Install modsecurity GUI WAF-FLE package
+	install_waffle		 # Install modsecurity GUI WAF-FLE package
 	install_certificates	 # Install ssl certificates
-	install_nginx		 # Install nginx package
+#	install_nginx		 # Install nginx package
 	install_mailpile	 # Install Mailpile package
 	install_easyrtc		 # Install EasyRTC package
 #	install_hublin		 # Install hublin package
