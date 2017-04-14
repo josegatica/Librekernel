@@ -5331,13 +5331,178 @@ server {
 }
 EOF
 
-
-
 # Restarting Yacy php5-fpm and Nginx services 
 echo "Restarting nginx ..." | tee -a /var/libre_config.log
 service yacy restart | tee -a /var/libre_config.log
 service php5-fpm restart | tee -a /var/libre_config.log
 /etc/init.d/nginx start | tee -a /var/libre_config.log
+}
+
+
+# ---------------------------------------------------------
+# Function to configure apache web server
+# ---------------------------------------------------------
+configure_apache()
+{
+# Configuring apache web server
+echo "Configuring apache web server ..." | tee -a /var/libre_config.log
+
+# Removing default configuration
+rm -r /etc/apache2/sites-enabled/000-default.conf
+
+# Emabling modules
+a2enmod ssl
+a2enmod proxy
+a2enmod proxy_http
+a2enmod proxy_balancer
+a2enmod proxy_ajp
+a2enmod rewrite
+a2enmod deflate
+a2enmod headers
+a2enmod proxy_connect
+a2enmod proxy_html
+a2enmod xml2enc
+
+# Configuring Listen interfaces and ports
+echo "
+# EasyRTC
+Listen 10.0.0.250:80
+Listen 10.0.0.250:443
+
+# Yacy
+Listen 10.0.0.251:80
+Listen 10.0.0.251:443
+
+# Friendica
+Listen 10.0.0.252:80
+Listen 10.0.0.252:443
+
+# Glype
+Listen 10.0.0.240:80
+Listen 10.0.0.240:443
+
+# i2p
+Listen 10.0.0.1:80
+
+# Mailpile
+Listen 10.0.0.254:80
+Listen 10.0.0.254:443
+
+# ntop
+Listen 10.0.0.244:80
+Listen 10.0.0.244:443
+
+# Owncloud
+Listen 10.0.0.253:80
+Listen 10.0.0.253:443
+
+# Postfix
+Listen 10.0.0.242:80
+Listen 10.0.0.242:443
+
+# Redmine
+Listen 10.0.0.249:80
+Listen 10.0.0.249:443
+
+# Roundcube
+Listen 10.0.0.243:80
+Listen 10.0.0.243:443
+
+# Sogo
+Listen 10.0.0.241:80
+Listen 10.0.0.241:443
+
+# Squidguard
+Listen 10.0.0.246:80
+Listen 10.0.0.246:443
+
+# Trac
+Listen 10.0.0.248:80
+Listen 10.0.0.248:443
+
+# Waf-fle
+Listen 10.0.0.238:80
+Listen 10.0.0.238:443
+ 
+# Webmin
+Listen 10.0.0.245:80
+Listen 10.0.0.245:443
+
+" /etc/apache2/ports.conf
+
+
+# ----------- search.librerouter.net ------------ #
+
+# Creating certificate bundle
+rm -rf /etc/ssl/apache/search/search_bundle.crt
+cat /etc/ssl/apache/search/search_librerouter_net.crt /etc/ssl/apache/search/search_librerouter_net.ca-bundle >> /etc/ssl/apache/search/search_bundle.crt
+
+cat << EOF > /etc/apache2/sites-enabled/yacy.conf
+# search.librerouter.net http server
+<VirtualHost 10.0.0.251:80>
+    ServerAdmin admin@librerouter.net
+    DocumentRoot /var/www/html
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+    RedirectMatch ^/$ https://search.librerouter.net
+    # rewrite ^/search(.*) http://$server_name/yacysearch.html?query=$arg_q? last;
+</VirtualHost>
+
+# search.librerouter.net https server
+<VirtualHost 10.0.0.251:443>
+    ServerAdmin admin@librerouter.net
+    ServerName search.librerouter.net
+    DocumentRoot /var/www/html
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+    SSLEngine on
+    SSLCertificateFile    /etc/ssl/apache/search/search_bundle.crt
+    SSLCertificateKeyFile /etc/ssl/apache/search/search_librerouter_net.key
+    ProxyPreserveHost On   
+    ProxyPass / http://127.0.0.1:8090/
+    ProxyPassReverse / http://127.0.0.1:8090/
+</VirtualHost>
+EOF
+
+
+# ---------- conference.librerouter.net ----------- #
+
+# Creating certificate bundle
+rm -rf /etc/ssl/apache/conference/conference_bundle.crt
+cat /etc/ssl/apache/conference/conference_librerouter_net.crt /etc/ssl/apache/conference/conference_librerouter_net.ca-bundle >> /etc/ssl/apache/conference/conference_bundle.crt
+
+# conference.librerouter.net http server
+cat << EOF > /etc/apache2/sites-enabled/easyrtc.conf
+<VirtualHost 10.0.0.250:80>
+    ServerAdmin admin@librerouter.net
+    DocumentRoot /var/www/html
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+    RedirectMatch ^/$ https://conference.librerouter.net/demos/demo_multiparty.html
+    # rewrite ^/search(.*) http://$server_name/yacysearch.html?query=$arg_q? last
+</VirtualHost>
+
+# conference.librerouter.net https server
+<VirtualHost 10.0.0.250:443>
+    ServerAdmin admin@librerouter.net
+    ServerName conference.librerouter.net
+    DocumentRoot /var/www/html
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+    SSLEngine on
+    SSLCertificateFile    /etc/ssl/apache/conference/conference_bundle.crt
+    SSLCertificateKeyFile /etc/ssl/apache/conference/conference_librerouter_net.key
+    # RedirectMatch ^/$ /demos/demo_multiparty.html
+    # rewrite ^/$ /demos/demo_multiparty.html permanent
+    ProxyPreserveHost On   
+    ProxyPass / http://127.0.0.1:8443/
+    ProxyPassReverse / http://127.0.0.1:8443/
+</VirtualHost>
+EOF
+
+# Restarting apache
+echo "Restarting apache web server ..." | tee -a /var/libre_config.log
+/etc/init.d/apache2 restart
 }
 
 
@@ -7083,8 +7248,8 @@ configure_easyrtc		# Configuring EasyRTC local service
 configure_owncloud		# Configuring Owncloud local service
 configure_mailpile		# Configuring Mailpile local service
 configure_modsecurity		# Configuring modsecurity 
-#configure_waffle		# Configuring modsecurity GUI WAF-FLE
-configure_nginx                 # Configuring Nginx web server
+configure_waffle		# Configuring modsecurity GUI WAF-FLE
+#configure_nginx                 # Configuring Nginx web server
 configure_privoxy		# Configuring Privoxy proxy server
 configure_tinyproxy             # Configuring Tinyproxy proxy server
 configure_squid			# Configuring squid proxy server
