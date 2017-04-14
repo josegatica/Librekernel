@@ -939,7 +939,7 @@ uwsgi --ini /etc/uwsgi/uwsgi.ini & > /dev/null 2>&1
 ntpdate -s ntp.ubuntu.com
 
 # Start nginx
-/etc/init.d/nginx start > /dev/null 2>&1 
+# /etc/init.d/nginx start > /dev/null 2>&1 
 
 # Start suricata
 ethtool -K lo rx off tso off gso off sg off gro off lro off
@@ -5497,6 +5497,39 @@ cat << EOF > /etc/apache2/sites-enabled/easyrtc.conf
     ProxyPreserveHost On   
     ProxyPass / http://127.0.0.1:8443/
     ProxyPassReverse / http://127.0.0.1:8443/
+</VirtualHost>
+EOF
+
+
+# ---------- webmin.librerouter.net ---------- #
+
+# Creating certificate bundle
+rm -rf /etc/ssl/apache/webmin/webmin_bundle.crt
+cat /etc/ssl/apache/webmin/webmin_librerouter_net.crt /etc/ssl/apache/webmin/webmin_librerouter_net.ca-bundle >> /etc/ssl/apache/webmin/webmin_bundle.crt
+
+# conference.librerouter.net http server
+cat << EOF > /etc/apache2/sites-enabled/webmin.conf
+<VirtualHost 10.0.0.245:80>
+    ServerAdmin admin@librerouter.net
+    DocumentRoot /var/www/html
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+    RedirectMatch ^/$ https://webmin.librerouter.net
+</VirtualHost>
+
+# conference.librerouter.net https server
+<VirtualHost 10.0.0.245:443>
+    ServerAdmin admin@librerouter.net
+    ServerName webmin.librerouter.net
+    DocumentRoot /var/www/html
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+    SSLEngine on
+    SSLCertificateFile    /etc/ssl/apache/webmin/webmin_bundle.crt
+    SSLCertificateKeyFile /etc/ssl/apache/webmin/webmin_librerouter_net.key
+    ProxyPreserveHost On
+    ProxyPass / http://127.0.0.1:10000/
+    ProxyPassReverse / http://127.0.0.1:10000/
 </VirtualHost>
 EOF
 
