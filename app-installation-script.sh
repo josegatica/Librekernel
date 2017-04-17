@@ -2238,7 +2238,7 @@ install_glype()
 	if [ ! -e glype-1.4.15.zip ]; then
 	    wget http://netix.dl.sourceforge.net/project/free-proxy-server/glype-1.4.15%20%281%29.zip
 	    if [ $? -ne 0 ]; then
-	        echo "Error: unable to download e2guardian" | tee -a /var/libre_install.log
+	        echo "Error: unable to download glype" | tee -a /var/libre_install.log
 	        # exit 3
 	    fi
 	    mv glype-1.4.15\ \(1\).zip glype-1.4.15.zip
@@ -2250,6 +2250,8 @@ install_glype()
 	# Creating glype home
 	mkdir /var/www/glype
 	cp -R glype-1.4.15/* /var/www/glype
+        chmod 777 /var/www/glype/includes/settings.php
+        chmod 777 /var/www/glype/tmp/
 
 	# Cleanup
 	rm -rf glype-1.4.15
