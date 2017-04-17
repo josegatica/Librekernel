@@ -846,7 +846,8 @@ get_interfaces()
 	
                 # Getting internal interface name        
 		# First of all will create a temporall bridge with eth1+wlan1 called br1        
-		# The INT_INTERFACE now is br1        
+		# The INT_INTERFACE now is br1    
+		apt-get install -y --force-yes bridge-utils
 		brctl addbr br1
 		brctl addif br1 eth1
 		brctl addif br1 wlan1        
