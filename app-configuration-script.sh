@@ -5471,8 +5471,8 @@ EOF
 rm -rf /etc/ssl/apache/conference/conference_bundle.crt
 cat /etc/ssl/apache/conference/conference_librerouter_net.crt /etc/ssl/apache/conference/conference_librerouter_net.ca-bundle >> /etc/ssl/apache/conference/conference_bundle.crt
 
-# conference.librerouter.net http server
 cat << EOF > /etc/apache2/sites-enabled/easyrtc.conf
+# conference.librerouter.net http server
 <VirtualHost 10.0.0.250:80>
     ServerAdmin admin@librerouter.net
     DocumentRoot /var/www/html
@@ -5507,8 +5507,8 @@ EOF
 rm -rf /etc/ssl/apache/webmin/webmin_bundle.crt
 cat /etc/ssl/apache/webmin/webmin_librerouter_net.crt /etc/ssl/apache/webmin/webmin_librerouter_net.ca-bundle >> /etc/ssl/apache/webmin/webmin_bundle.crt
 
-# conference.librerouter.net http server
 cat << EOF > /etc/apache2/sites-enabled/webmin.conf
+# conference.librerouter.net http server
 <VirtualHost 10.0.0.245:80>
     ServerAdmin admin@librerouter.net
     DocumentRoot /var/www/html
@@ -5540,8 +5540,8 @@ EOF
 rm -rf /etc/ssl/apache/ntop/ntop_bundle.crt
 cat /etc/ssl/apache/ntop/ntop_librerouter_net.crt /etc/ssl/apache/ntop/ntop_librerouter_net.ca-bundle >> /etc/ssl/apache/ntop/ntop_bundle.crt
 
-# ntop.librerouter.net http server
 cat << EOF > /etc/apache2/sites-enabled/ntop.conf
+# ntop.librerouter.net http server
 <VirtualHost 10.0.0.244:80>
     ServerAdmin admin@librerouter.net
     DocumentRoot /var/www/html
@@ -5567,6 +5567,38 @@ cat << EOF > /etc/apache2/sites-enabled/ntop.conf
     RequestHeader set X-Forwarded-Port "443"
 </VirtualHost>
 EOF
+
+
+# ---------- glype.librerouter.net ---------- #
+
+# Creating certificate bundle
+rm -rf /etc/ssl/apache/glype/glype_bundle.crt
+cat /etc/ssl/apache/glype/glype_librerouter_net.crt /etc/ssl/apache/glype/glype_librerouter_net.ca-bundle >> /etc/ssl/apache/glype/glype_bundle.crt
+
+cat << EOF > /etc/apache2/sites-enabled/glype.conf
+# glype.librerouter.net http server
+<VirtualHost 10.0.0.240:80>
+    ServerAdmin admin@librerouter.net
+    DocumentRoot /var/www/html
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+    RedirectMatch ^/$ https://glype.librerouter.net
+</VirtualHost>
+
+# glype.librerouter.net https server
+<VirtualHost 10.0.0.240:443>
+    ServerAdmin admin@librerouter.net
+    ServerName glype.librerouter.net
+    DocumentRoot /var/www/glype
+    DirectoryIndex index.php index.html index.htm
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+    SSLEngine on
+    SSLCertificateFile    /etc/ssl/apache/glype/glype_bundle.crt
+    SSLCertificateKeyFile /etc/ssl/apache/glype/glype_librerouter_net.key
+</VirtualHost>
+EOF
+
 
 # Restarting apache
 echo "Restarting apache web server ..." | tee -a /var/libre_config.log
