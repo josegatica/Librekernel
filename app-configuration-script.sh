@@ -5533,6 +5533,41 @@ cat << EOF > /etc/apache2/sites-enabled/webmin.conf
 </VirtualHost>
 EOF
 
+
+# ---------- ntop.librerouter.net ---------- #
+
+# Creating certificate bundle
+rm -rf /etc/ssl/apache/ntop/ntop_bundle.crt
+cat /etc/ssl/apache/ntop/ntop_librerouter_net.crt /etc/ssl/apache/ntop/ntop_librerouter_net.ca-bundle >> /etc/ssl/apache/ntop/ntop_bundle.crt
+
+# ntop.librerouter.net http server
+cat << EOF > /etc/apache2/sites-enabled/ntop.conf
+<VirtualHost 10.0.0.244:80>
+    ServerAdmin admin@librerouter.net
+    DocumentRoot /var/www/html
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+    RedirectMatch ^/$ https://ntop.librerouter.net
+</VirtualHost>
+
+# ntop.librerouter.net https server
+<VirtualHost 10.0.0.244:443>
+    ServerAdmin admin@librerouter.net
+    ServerName ntop.librerouter.net
+    DocumentRoot /var/www/html
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+    SSLEngine on
+    SSLCertificateFile    /etc/ssl/apache/ntop/ntop_bundle.crt
+    SSLCertificateKeyFile /etc/ssl/apache/ntop/ntop_librerouter_net.key
+    ProxyPreserveHost On
+    ProxyPass / http://127.0.0.1:3000/ retry=2 acquire=3000 timeout=1200 Keepalive=On
+    ProxyPassReverse / http://127.0.0.1:3000/
+    RequestHeader set X-Forwarded-Proto "https"
+    RequestHeader set X-Forwarded-Port "443"
+</VirtualHost>
+EOF
+
 # Restarting apache
 echo "Restarting apache web server ..." | tee -a /var/libre_config.log
 /etc/init.d/apache2 restart
