@@ -5778,6 +5778,51 @@ cat << EOF > /etc/apache2/sites-enabled/redmine.conf
 EOF
 
 
+# ---------- storage.librerouter.net ---------- #
+
+# Creating certificate bundle
+rm -rf /etc/ssl/apache/storage/storage_bundle.crt
+cat /etc/ssl/apache/storage/storage_librerouter_net.crt /etc/ssl/apache/storage/storage_librerouter_net.ca-bundle >> /etc/ssl/apache/storage/storage_bundle.crt
+
+cat << EOF > /etc/apache2/sites-enabled/storage.conf
+# storage.librerouter.net http server
+<VirtualHost 10.0.0.253:80>
+    ServerAdmin admin@librerouter.net
+    DocumentRoot /var/www/
+    ErrorLog \${APACHE_LOG_DIR}/storage_error.log
+    CustomLog \${APACHE_LOG_DIR}/storage_access.log combined
+    RedirectMatch ^/$ https://storage.librerouter.net
+</VirtualHost>
+
+# storage.librerouter.net https server
+<VirtualHost 10.0.0.253:443>
+    ServerAdmin admin@librerouter.net
+    ServerName storage.librerouter.net
+    ErrorLog \${APACHE_LOG_DIR}/storage_error.log
+    CustomLog \${APACHE_LOG_DIR}/storage_access.log combined
+    SSLEngine on
+    SSLCertificateFile    /etc/ssl/apache/storage/storage_bundle.crt
+    SSLCertificateKeyFile /etc/ssl/apache/storage/storage_librerouter_net.key
+
+    DocumentRoot /var/www/owncloud
+
+    <Directory /var/www/owncloud/>
+      Options +FollowSymlinks
+      AllowOverride All
+
+    <IfModule mod_dav.c>
+      Dav off
+    </IfModule>
+
+    SetEnv HOME /var/www/owncloud
+    SetEnv HTTP_HOME /var/www/owncloud
+
+    </Directory>
+
+</VirtualHost>
+EOF
+
+
 # Restarting apache
 echo "Restarting apache web server ..." | tee -a /var/libre_config.log
 /etc/init.d/apache2 restart
