@@ -407,6 +407,7 @@ if [ "$PROCESSOR" = "Intel" -o "$PROCESSOR" = "AMD" -o "$PROCESSOR" = "ARM" ]; t
 	auto $INT_INTERFACE
 	#allow-hotplug $INT_INTERFACE
 	iface $INT_INTERFACE inet static
+	bridge_ports eth1 wlan1
 	    address 10.0.0.1
 	    netmask 255.255.255.0
             network 10.0.0.0
