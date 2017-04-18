@@ -5443,10 +5443,10 @@ cat << EOF > /etc/apache2/sites-enabled/yacy.conf
 <VirtualHost 10.0.0.251:80>
     ServerAdmin admin@librerouter.net
     DocumentRoot /var/www/html
-    ErrorLog ${APACHE_LOG_DIR}/error.log
-    CustomLog ${APACHE_LOG_DIR}/access.log combined
+    ErrorLog \${APACHE_LOG_DIR}/search_error.log
+    CustomLog \${APACHE_LOG_DIR}/search_access.log combined
     RedirectMatch ^/$ https://search.librerouter.net
-    # rewrite ^/search(.*) http://$server_name/yacysearch.html?query=$arg_q? last;
+    # rewrite ^/search(.*) http://\$server_name/yacysearch.html?query=\$arg_q? last;
 </VirtualHost>
 
 # search.librerouter.net https server
@@ -5454,8 +5454,8 @@ cat << EOF > /etc/apache2/sites-enabled/yacy.conf
     ServerAdmin admin@librerouter.net
     ServerName search.librerouter.net
     DocumentRoot /var/www/html
-    ErrorLog ${APACHE_LOG_DIR}/error.log
-    CustomLog ${APACHE_LOG_DIR}/access.log combined
+    ErrorLog \${APACHE_LOG_DIR}/search_error.log
+    CustomLog \${APACHE_LOG_DIR}/search_access.log combined
     SSLEngine on
     SSLCertificateFile    /etc/ssl/apache/search/search_bundle.crt
     SSLCertificateKeyFile /etc/ssl/apache/search/search_librerouter_net.key
@@ -5477,10 +5477,9 @@ cat << EOF > /etc/apache2/sites-enabled/easyrtc.conf
 <VirtualHost 10.0.0.250:80>
     ServerAdmin admin@librerouter.net
     DocumentRoot /var/www/html
-    ErrorLog ${APACHE_LOG_DIR}/error.log
-    CustomLog ${APACHE_LOG_DIR}/access.log combined
+    ErrorLog \${APACHE_LOG_DIR}/conference_error.log
+    CustomLog \${APACHE_LOG_DIR}/conference_access.log combined
     RedirectMatch ^/$ https://conference.librerouter.net/demos/demo_multiparty.html
-    # rewrite ^/search(.*) http://$server_name/yacysearch.html?query=$arg_q? last
 </VirtualHost>
 
 # conference.librerouter.net https server
@@ -5488,8 +5487,8 @@ cat << EOF > /etc/apache2/sites-enabled/easyrtc.conf
     ServerAdmin admin@librerouter.net
     ServerName conference.librerouter.net
     DocumentRoot /var/www/html
-    ErrorLog ${APACHE_LOG_DIR}/error.log
-    CustomLog ${APACHE_LOG_DIR}/access.log combined
+    ErrorLog \${APACHE_LOG_DIR}/conference_error.log
+    CustomLog \${APACHE_LOG_DIR}/conference_access.log combined
     SSLEngine on
     SSLCertificateFile    /etc/ssl/apache/conference/conference_bundle.crt
     SSLCertificateKeyFile /etc/ssl/apache/conference/conference_librerouter_net.key
@@ -5513,8 +5512,8 @@ cat << EOF > /etc/apache2/sites-enabled/webmin.conf
 <VirtualHost 10.0.0.245:80>
     ServerAdmin admin@librerouter.net
     DocumentRoot /var/www/html
-    ErrorLog ${APACHE_LOG_DIR}/error.log
-    CustomLog ${APACHE_LOG_DIR}/access.log combined
+    ErrorLog \${APACHE_LOG_DIR}/webmin_error.log
+    CustomLog \${APACHE_LOG_DIR}/webmin_access.log combined
     RedirectMatch ^/$ https://webmin.librerouter.net
 </VirtualHost>
 
@@ -5523,8 +5522,8 @@ cat << EOF > /etc/apache2/sites-enabled/webmin.conf
     ServerAdmin admin@librerouter.net
     ServerName webmin.librerouter.net
     DocumentRoot /var/www/html
-    ErrorLog ${APACHE_LOG_DIR}/error.log
-    CustomLog ${APACHE_LOG_DIR}/access.log combined
+    ErrorLog \${APACHE_LOG_DIR}/webmin_error.log
+    CustomLog \${APACHE_LOG_DIR}/webmin_access.log combined
     SSLEngine on
     SSLCertificateFile    /etc/ssl/apache/webmin/webmin_bundle.crt
     SSLCertificateKeyFile /etc/ssl/apache/webmin/webmin_librerouter_net.key
@@ -5546,8 +5545,8 @@ cat << EOF > /etc/apache2/sites-enabled/ntop.conf
 <VirtualHost 10.0.0.244:80>
     ServerAdmin admin@librerouter.net
     DocumentRoot /var/www/html
-    ErrorLog ${APACHE_LOG_DIR}/error.log
-    CustomLog ${APACHE_LOG_DIR}/access.log combined
+    ErrorLog \${APACHE_LOG_DIR}/ntop_error.log
+    CustomLog \${APACHE_LOG_DIR}/ntop_access.log combined
     RedirectMatch ^/$ https://ntop.librerouter.net
 </VirtualHost>
 
@@ -5556,8 +5555,8 @@ cat << EOF > /etc/apache2/sites-enabled/ntop.conf
     ServerAdmin admin@librerouter.net
     ServerName ntop.librerouter.net
     DocumentRoot /var/www/html
-    ErrorLog ${APACHE_LOG_DIR}/error.log
-    CustomLog ${APACHE_LOG_DIR}/access.log combined
+    ErrorLog \${APACHE_LOG_DIR}/ntop_error.log
+    CustomLog \${APACHE_LOG_DIR}/ntop_access.log combined
     SSLEngine on
     SSLCertificateFile    /etc/ssl/apache/ntop/ntop_bundle.crt
     SSLCertificateKeyFile /etc/ssl/apache/ntop/ntop_librerouter_net.key
@@ -5581,8 +5580,8 @@ cat << EOF > /etc/apache2/sites-enabled/glype.conf
 <VirtualHost 10.0.0.240:80>
     ServerAdmin admin@librerouter.net
     DocumentRoot /var/www/html
-    ErrorLog ${APACHE_LOG_DIR}/error.log
-    CustomLog ${APACHE_LOG_DIR}/access.log combined
+    ErrorLog \${APACHE_LOG_DIR}/glype_error.log
+    CustomLog \${APACHE_LOG_DIR}/glype_access.log combined
     RedirectMatch ^/$ https://glype.librerouter.net
 </VirtualHost>
 
@@ -5592,8 +5591,8 @@ cat << EOF > /etc/apache2/sites-enabled/glype.conf
     ServerName glype.librerouter.net
     DocumentRoot /var/www/glype
     DirectoryIndex index.php index.html index.htm
-    ErrorLog ${APACHE_LOG_DIR}/error.log
-    CustomLog ${APACHE_LOG_DIR}/access.log combined
+    ErrorLog \${APACHE_LOG_DIR}/glype_error.log
+    CustomLog \${APACHE_LOG_DIR}/glype_access.log combined
     SSLEngine on
     SSLCertificateFile    /etc/ssl/apache/glype/glype_bundle.crt
     SSLCertificateKeyFile /etc/ssl/apache/glype/glype_librerouter_net.key
@@ -5612,8 +5611,8 @@ cat << EOF > /etc/apache2/sites-enabled/sogo.conf
 <VirtualHost 10.0.0.241:80>
     ServerAdmin admin@librerouter.net
     DocumentRoot /var/www/html
-    ErrorLog ${APACHE_LOG_DIR}/error.log
-    CustomLog ${APACHE_LOG_DIR}/access.log combined
+    ErrorLog \${APACHE_LOG_DIR}/error.log
+    CustomLog \${APACHE_LOG_DIR}/access.log combined
     RedirectMatch ^/$ https://sogo.librerouter.net
 </VirtualHost>
 
@@ -5621,8 +5620,8 @@ cat << EOF > /etc/apache2/sites-enabled/sogo.conf
 <VirtualHost 10.0.0.241:443>
     ServerAdmin admin@librerouter.net
     ServerName sogo.librerouter.net
-    ErrorLog ${APACHE_LOG_DIR}/error.log
-    CustomLog ${APACHE_LOG_DIR}/access.log combined
+    ErrorLog \${APACHE_LOG_DIR}/error.log
+    CustomLog \${APACHE_LOG_DIR}/access.log combined
     SSLEngine on
     SSLCertificateFile    /etc/ssl/apache/sogo/sogo_bundle.crt
     SSLCertificateKeyFile /etc/ssl/apache/sogo/sogo_librerouter_net.key
