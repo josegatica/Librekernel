@@ -516,7 +516,7 @@ elif [ $PLATFORM = "D8" ]; then
         php5-curl php5-intl php5-mcrypt php5-memcache \
         php-xml-parser php-pear phpmyadmin php5 mailutils \
         apache2 libapache2-mod-php5 libapache2-modsecurity \
-        rbapache2-mod-fcgid pcbind- exim4- \
+        rbapache2-mod-fcgid libapache2-mod-passenger pcbind- exim4- \
         openjdk-7-jre-headless uwsgi \
         php5-gd php5-imap smarty3 git ntpdate macchanger \
         bridge-utils hostapd librrd-dev \
