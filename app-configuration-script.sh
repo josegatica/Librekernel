@@ -258,7 +258,8 @@ get_interfaces()
                         echo 'DNS Servers:' $CDNS
 
         # Getting internal interface name
-        INT_INTERFACE=`ls /sys/class/net/ | grep -w 'eth0\|eth1\|wlan0\|wlan1' | grep -v "$EXT_INTERFACE" | sed -n '1p'`
+        #INT_INTERFACE=`ls /sys/class/net/ | grep -w 'eth0\|eth1\|wlan0\|wlan1' | grep -v "$EXT_INTERFACE" | sed -n '1p'`
+	INT_INTERFACE="br1"
         echo "Internal interface: $INT_INTERFACE" | tee -a /var/libre_config.log
 }
 
