@@ -961,7 +961,7 @@ evebox -e http://localhost:9200 &
 tracd -s -b 127.0.0.1 --port 8000 /opt/trac/libretrac &
 
 # Start Redmine
-thin -c /opt/redmine/redmine-3.3.1 --servers 1 -e production -a 127.0.0.1 -p 8889 -d start > /dev/null 2>&1 &
+# thin -c /opt/redmine/redmine-3.3.1 --servers 1 -e production -a 127.0.0.1 -p 8889 -d start > /dev/null 2>&1 
 
 # Start Redsocks
 /opt/redsocks/redsocks -c /opt/redsocks/redsocks.conf &
@@ -3592,22 +3592,22 @@ configure_redmine()
 	bundle install --without development test rmagick
 
 	# Creating thin configuration
-        mkdir -p /etc/thin2.1
-        touch /etc/thin2.1/config.yml
-	echo "
-pid: /var/run/thin.pid
-timeout: 30
-wait: 30
-log: /var/log/thin.log
-max_conns: 1024
-environment: production
-max_persistent_conns: 512
-servers: 1
-threaded: true
-no-epoll: true
-daemonize: true
-chdir: /opt/redmine/redmine-3.3.1
-" > /etc/thin2.1/config.yml 
+#        mkdir -p /etc/thin2.1
+#        touch /etc/thin2.1/config.yml
+#	echo "
+#pid: /var/run/thin.pid
+#timeout: 30
+#wait: 30
+#log: /var/log/thin.log
+#max_conns: 1024
+#environment: production
+#max_persistent_conns: 512
+#servers: 1
+#threaded: true
+#no-epoll: true
+#daemonize: true
+#chdir: /opt/redmine/redmine-3.3.1
+#" > /etc/thin2.1/config.yml 
 	
         # Customize DB configuration
 echo "
@@ -3633,10 +3633,13 @@ production:
 	RAILS_ENV=production REDMINE_LANG=en bundle exec rake redmine:load_default_data
 
 	# Start thin server
-	thin -c /opt/redmine/redmine-3.3.1 --servers 1 -e production -a 127.0.0.1 -p 8889 -d start
+	# thin -c /opt/redmine/redmine-3.3.1 --servers 1 -e production -a 127.0.0.1 -p 8889 -d start
 
         # Link the redmine public dir to the nginx-redmine root:
-        # ln -s /opt/redmine/redmine-3.3.1/public/ /var/www/html/redmine
+        ln -s /opt/redmine/redmine-3.3.1/public/ /var/www/redmine
+
+        # Set permission for Gemfile
+        chmod 777 /opt/redmine/redmine-3.3.1/Gemfile.lock
 }
 
 
@@ -5364,6 +5367,8 @@ a2enmod headers
 a2enmod proxy_connect
 a2enmod proxy_html
 a2enmod xml2enc
+a2enmod fcgid
+a2enmod passenger
 
 # Configuring Listen interfaces and ports
 echo "
@@ -5727,6 +5732,48 @@ ProxyPass /SOGo http://127.0.0.1:20000/SOGo retry=0
   RewriteRule ^/.well-known/caldav/?$ /SOGo/dav [R=301]
   RewriteRule ^/.well-known/carddav/?$ /SOGo/dav [R=301]
 </IfModule>
+</VirtualHost>
+EOF
+
+
+# ---------- redmine.librerouter.net ---------- #
+
+# Creating certificate bundle
+rm -rf /etc/ssl/apache/redmine/redmine_bundle.crt
+cat /etc/ssl/apache/redmine/redmine_librerouter_net.crt /etc/ssl/apache/redmine/redmine_librerouter_net.ca-bundle >> /etc/ssl/apache/redmine/redmine_bundle.crt
+
+cat << EOF > /etc/apache2/sites-enabled/redmine.conf
+# redmine.librerouter.net http server
+<VirtualHost 10.0.0.249:80>
+    ServerAdmin admin@librerouter.net
+    DocumentRoot /var/www/
+    ErrorLog \${APACHE_LOG_DIR}/redmine_error.log
+    CustomLog \${APACHE_LOG_DIR}/redmine_access.log combined
+    RedirectMatch ^/$ https://redmine.librerouter.net
+</VirtualHost>
+
+# redmine.librerouter.net https server
+<VirtualHost 10.0.0.249:443>
+    ServerAdmin admin@librerouter.net
+    ServerName redmine.librerouter.net
+    ErrorLog \${APACHE_LOG_DIR}/redmine_error.log
+    CustomLog \${APACHE_LOG_DIR}/redmine_access.log combined
+    SSLEngine on
+    SSLCertificateFile    /etc/ssl/apache/redmine/redmine_bundle.crt
+    SSLCertificateKeyFile /etc/ssl/apache/redmine/redmine_librerouter_net.key
+
+    RewriteEngine  on
+    RewriteRule   ^/$  /redmine/  [R]
+
+    DocumentRoot /var/www  
+    RailsBaseURI /redmine
+
+    <Directory /var/www>   
+      Options FollowSymLinks     
+      order allow,deny
+      allow from all
+    </Directory> 
+
 </VirtualHost>
 EOF
 
