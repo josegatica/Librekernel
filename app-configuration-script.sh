@@ -6047,6 +6047,39 @@ cat << EOF > /etc/apache2/sites-enabled/squidguard.conf
 EOF
 
 
+# ---------- email.librerouter.net ---------- #
+
+# Creating certificate bundle
+rm -rf /etc/ssl/apache/email/email_bundle.crt
+cat /etc/ssl/apache/email/email_librerouter_net.crt /etc/ssl/apache/email/email_librerouter_net.ca-bundle >> /etc/ssl/apache/email/email_bundle.crt
+
+cat << EOF > /etc/apache2/sites-enabled/mailpile.conf
+# email.librerouter.net http server
+<VirtualHost 10.0.0.254:80>
+    ServerAdmin admin@librerouter.net
+    DocumentRoot /var/www/html
+    ErrorLog \${APACHE_LOG_DIR}/email_error.log
+    CustomLog \${APACHE_LOG_DIR}/email_access.log combined
+    RedirectMatch ^/$ https://email.librerouter.net
+</VirtualHost>
+
+# email.librerouter.net https server
+<VirtualHost 10.0.0.254:443>
+    ServerAdmin admin@librerouter.net
+    ServerName email.librerouter.net
+    DocumentRoot /var/www/html
+    ErrorLog \${APACHE_LOG_DIR}/email_error.log
+    CustomLog \${APACHE_LOG_DIR}/email_access.log combined
+    SSLEngine on
+    SSLCertificateFile    /etc/ssl/nginx/email/email_bundle.crt
+    SSLCertificateKeyFile /etc/ssl/nginx/email/email_librerouter_net.key
+    ProxyPreserveHost On
+    ProxyPass / http://127.0.0.1:33411/
+    ProxyPassReverse / http://127.0.0.1:33411/
+</VirtualHost>
+EOF
+
+
 # Restarting apache
 echo "Restarting apache web server ..." | tee -a /var/libre_config.log
 /etc/init.d/apache2 restart
