@@ -6031,8 +6031,8 @@ cat << EOF > /etc/apache2/sites-enabled/squidguard.conf
     ErrorLog \${APACHE_LOG_DIR}/squidguard_error.log
     CustomLog \${APACHE_LOG_DIR}/squidguard_access.log combined
     SSLEngine on
-    SSLCertificateFile    /etc/ssl/nginx/squidguard/squidguard_bundle.crt
-    SSLCertificateKeyFile /etc/ssl/nginx/squidguard/squidguard_librerouter_net.key
+    SSLCertificateFile    /etc/ssl/apache/squidguard/squidguard_bundle.crt
+    SSLCertificateKeyFile /etc/ssl/apache/squidguard/squidguard_librerouter_net.key
 
     <Directory /var/www/squidguardmgr>
         Options +ExecCGI
@@ -6071,11 +6071,44 @@ cat << EOF > /etc/apache2/sites-enabled/mailpile.conf
     ErrorLog \${APACHE_LOG_DIR}/email_error.log
     CustomLog \${APACHE_LOG_DIR}/email_access.log combined
     SSLEngine on
-    SSLCertificateFile    /etc/ssl/nginx/email/email_bundle.crt
-    SSLCertificateKeyFile /etc/ssl/nginx/email/email_librerouter_net.key
+    SSLCertificateFile    /etc/ssl/nginx/apache/email_bundle.crt
+    SSLCertificateKeyFile /etc/ssl/nginx/apache/email_librerouter_net.key
     ProxyPreserveHost On
     ProxyPass / http://127.0.0.1:33411/
     ProxyPassReverse / http://127.0.0.1:33411/
+</VirtualHost>
+EOF
+
+
+# ---------- kibana.librerouter.net ---------- #
+
+# Creating certificate bundle
+rm -rf /etc/ssl/apache/kibana/kibana_bundle.crt
+cat /etc/ssl/apache/kibana/kibana_librerouter_net.crt /etc/ssl/apache/kibana/kibana_librerouter_net.ca-bundle >> /etc/ssl/apache/kibana/kibana_bundle.crt
+
+cat << EOF > /etc/apache2/sites-enabled/kibana.conf
+# kibana.librerouter.net http server
+<VirtualHost 10.0.0.239:80>
+    ServerAdmin admin@librerouter.net
+    DocumentRoot /var/www/html
+    ErrorLog \${APACHE_LOG_DIR}/kibana_error.log
+    CustomLog \${APACHE_LOG_DIR}/kibana_access.log combined
+    RedirectMatch ^/$ https://kibana.librerouter.net
+</VirtualHost>
+
+# kibana.librerouter.net https server
+<VirtualHost 10.0.0.239:443>
+    ServerAdmin admin@librerouter.net
+    ServerName kibana.librerouter.net
+    DocumentRoot /var/www/html
+    ErrorLog \${APACHE_LOG_DIR}/kibana_error.log
+    CustomLog \${APACHE_LOG_DIR}/kibana_access.log combined
+    SSLEngine on
+    SSLCertificateFile    /etc/ssl/apache/kibana/kibana_bundle.crt
+    SSLCertificateKeyFile /etc/ssl/apache/kibana/kibana_librerouter_net.key
+    ProxyPreserveHost On
+    ProxyPass / http://127.0.0.1:5601/
+    ProxyPassReverse / http://127.0.0.1:5601/
 </VirtualHost>
 EOF
 
