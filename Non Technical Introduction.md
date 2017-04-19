@@ -13,11 +13,11 @@ We all care about data privacy and security to some degree, of course. We also k
 
 ***If the internet functions the way we say, where does the problem reside?***
 
-It is not the way the internet functions, but the way we use it. All the technologies need to use it productively and simultanously enhance security and privacy are available, even free. 
+It is not the way the internet functions, but the way we use it. All the technologies needed to use it productively and simultanously enhance security and privacy are available, even free. 
 
 Our data are prone to be captured alike by cyber-criminals, data-greedy corporations, and governments that care more about the transparency of citizens than about the transparency of their administration. This is the more so given the fact that most of our communication occurs through the services of those data-greedy corporations, that governments can obligue the former to deliver data to them through law enforcement, and that both possess the financial leverage to hire the most skilled cyber-criminals to pursue their interests.
 
-Additionally, as soon as we open a door to the internet, every attack to compromise your device is possible, and more probable to happen if we are "on the road" with one of the two most widely spread comercial operating systems. Such a situation ends up exposing even those sensible data we were in the first place never disposed to transfere over the internet. There are situations where a lot of convenience with a little bit of security is not enough, we need plenty of both. To stay productive and valuable, to be responsable with our customers, our informants, or even to safe lifes. 
+Additionally, as soon as we open a door to the internet, every attack to compromise the device is possible, and more probable to happen if we are "on the road" with one of the two most widely spread comercial operating systems. Such a situation ends up exposing even those sensible data we were in the first place never disposed to transfere over the internet. There are situations where a lot of convenience with a little bit of security is not enough, we need plenty of both. To stay productive and valuable, to be responsable with our customers, our informants, or even to safe lifes. 
 
 ***But, we have a firewall, antivirus-software and a AdBlocker installed!***
 
@@ -25,7 +25,7 @@ Sure, there are a lot of standarized security meassures implemented in every com
 
 ***How to work secure, productive, valuable and responsable with sensible data***
 
-Privacy configuration is important by the internet surfing. To be protected you need the necessary infrastructure: a grid with resilence. Through the community grid the information is encrypted before leaving your computer, then is encrypted again and distributed in paths; impossible to read by anyone else except to the person with the prospects. The implementation of your community grid avoids viruses, exploits and protects your malicious internet traffic transparently with no additional button or additional software. 
+Privacy configuration is important when surfing through the internet. To be protected you need the necessary infrastructure: a grid with resilence. Through the community grid the information is encrypted before leaving your computer, then it is encrypted again and distributed in paths. Thus, to read it becomes virtually impossible for anyone but the owner of the device. Further, it is possible to restore all your files from the grid, even if your device is destroyed, still avoiding central storage in third-party clouds. The implementation of your community grid avoids viruses, exploits and protects your malicious internet traffic transparently with no additional button or additional software. 
 
 Know-how, reliability, technical and economical convenience -all of it integrated in a plug and play device- that is the added value we deliver. https://ksr-video.imgix.net/projects/1830782/video-546980-h264_high.mp4
 
@@ -35,7 +35,7 @@ Our philosophy at Libre Router is based on the pillars of **sustainable cybersec
 
 ***But, what kind of people cares about sustainable cybersecurity?***
 
-Our target group is based on early adopters (people interested in new gadgets), cityzens and companies in conflict-ridden countries, value-conscious consumers (people who care about sustainable consumption) and pro-free-download as well as anti-advertising internet users who look for **security, productivity and comfort**.
+Our target group is based on early adopters (people interested in new gadgets), citizens and companies in conflict-ridden countries, value-conscious consumers (people who care about sustainable consumption) and pro-free-download as well as anti-advertising internet users who look for **security, productivity and comfort**.
 
 ***Ok, I want to know more about Libre Router!***
 
