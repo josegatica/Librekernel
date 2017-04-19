@@ -6113,6 +6113,36 @@ cat << EOF > /etc/apache2/sites-enabled/kibana.conf
 EOF
 
 
+# ---------- postfix.librerouter.net ---------- #
+
+# Creating certificate bundle
+rm -rf /etc/ssl/apache/postfix/postfix_bundle.crt
+cat /etc/ssl/apache/postfix/postfix_librerouter_net.crt /etc/ssl/apache/postfix/postfix_librerouter_net.ca-bundle >> /etc/ssl/apache/postfix/postfix_bundle.crt
+
+cat << EOF > /etc/apache2/sites-enabled/postfix.conf
+# postfix.librerouter.net http server
+<VirtualHost 10.0.0.242:80>
+    ServerAdmin admin@librerouter.net
+    DocumentRoot /var/www/html
+    ErrorLog \${APACHE_LOG_DIR}/postfix_error.log
+    CustomLog \${APACHE_LOG_DIR}/postfix_access.log combined
+    RedirectMatch ^/$ https://postfix.librerouter.net
+</VirtualHost>
+
+# postfix.librerouter.net https server
+<VirtualHost 10.0.0.242:443>
+    ServerAdmin admin@librerouter.net
+    ServerName postfix.librerouter.net
+    DocumentRoot /usr/share/postfixadmin
+    ErrorLog \${APACHE_LOG_DIR}/postfix_error.log
+    CustomLog \${APACHE_LOG_DIR}/postfix_access.log combined
+    SSLEngine on
+    SSLCertificateFile    /etc/ssl/apache/postfix/postfix_bundle.crt
+    SSLCertificateKeyFile /etc/ssl/apache/postfix/postfix_librerouter_net.key
+</VirtualHost>
+EOF
+
+
 # Restarting apache
 echo "Restarting apache web server ..." | tee -a /var/libre_config.log
 /etc/init.d/apache2 restart
