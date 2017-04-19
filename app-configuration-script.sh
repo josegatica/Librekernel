@@ -6143,6 +6143,44 @@ cat << EOF > /etc/apache2/sites-enabled/postfix.conf
 EOF
 
 
+# ---------- social.librerouter.net ---------- #
+
+# Creating certificate bundle
+rm -rf /etc/ssl/apache/social/social_bundle.crt
+cat /etc/ssl/apache/social/social_librerouter_net.crt /etc/ssl/apache/social/social_librerouter_net.ca-bundle >> /etc/ssl/apache/social/social_bundle.crt
+
+cat << EOF > /etc/apache2/sites-enabled/friendica.conf
+# social.librerouter.net http server
+<VirtualHost 10.0.0.252:80>
+    ServerAdmin admin@librerouter.net
+    DocumentRoot /var/www/html
+    ErrorLog \${APACHE_LOG_DIR}/social_error.log
+    CustomLog \${APACHE_LOG_DIR}/social_access.log combined
+    RedirectMatch ^/$ https://social.librerouter.net
+</VirtualHost>
+
+# social.librerouter.net https server
+<VirtualHost 10.0.0.252:443>
+    ServerAdmin admin@librerouter.net
+    ServerName social.librerouter.net
+    DocumentRoot /var/www/friendica
+    ErrorLog \${APACHE_LOG_DIR}/social_error.log
+    CustomLog \${APACHE_LOG_DIR}/social_access.log combined
+    SSLEngine on
+    SSLCertificateFile    /etc/ssl/apache/social/social_bundle.crt
+    SSLCertificateKeyFile /etc/ssl/apache/social/social_librerouter_net.key
+
+    <Directory /var/www/friendica>
+       Options Indexes FollowSymLinks MultiViews
+       AllowOverride All
+       Order allow,deny
+       allow from all
+    </Directory>
+
+</VirtualHost>
+EOF
+
+
 # Restarting apache
 echo "Restarting apache web server ..." | tee -a /var/libre_config.log
 /etc/init.d/apache2 restart
