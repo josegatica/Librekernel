@@ -6181,6 +6181,43 @@ cat << EOF > /etc/apache2/sites-enabled/friendica.conf
 EOF
 
 
+# ---------- waffle.librerouter.net ---------- #
+
+# Creating certificate bundle
+rm -rf /etc/ssl/apache/waffle/waffle_bundle.crt
+cat /etc/ssl/apache/waffle/waffle_librerouter_net.crt /etc/ssl/apache/waffle/waffle_librerouter_net.ca-bundle >> /etc/ssl/apache/waffle/waffle_bundle.crt
+
+cat << EOF > /etc/apache2/sites-enabled/waffle.conf
+# waffle.librerouter.net http server
+<VirtualHost 10.0.0.238:80>
+    ServerAdmin admin@librerouter.net
+    DocumentRoot /var/www/html
+    ErrorLog \${APACHE_LOG_DIR}/waffle_error.log
+    CustomLog \${APACHE_LOG_DIR}/waffle_access.log combined
+    RedirectMatch ^/$ https://waffle.librerouter.net
+</VirtualHost>
+
+# waffle.librerouter.net https server
+<VirtualHost 10.0.0.238:443>
+    ServerAdmin admin@librerouter.net
+    ServerName waffle.librerouter.net
+    DocumentRoot /usr/local/waf-fle/dashboard
+    ErrorLog \${APACHE_LOG_DIR}/waffle_error.log
+    CustomLog \${APACHE_LOG_DIR}/waffle_access.log combined
+    SSLEngine on
+    SSLCertificateFile    /etc/ssl/apache/waffle/waffle_bundle.crt
+    SSLCertificateKeyFile /etc/ssl/apache/waffle/waffle_librerouter_net.key
+
+    <Directory /usr/local/waf-fle/dashboard>
+        Options Indexes FollowSymLinks
+        AllowOverride None
+        Require all granted
+    </Directory>
+
+</VirtualHost>
+EOF
+
+
 # Restarting apache
 echo "Restarting apache web server ..." | tee -a /var/libre_config.log
 /etc/init.d/apache2 restart
