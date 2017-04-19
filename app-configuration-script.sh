@@ -2922,6 +2922,76 @@ cgi=/var/www/squidguardmgr
 cgi-allowed-ext = .cgi
 EOF
 
+# squidguardmgr configuration
+cat << EOF > /var/www/squidguardmgr/squidguardmgr.conf
+#
+# SquidGuard Manager configuration file
+#
+
+# Path to the grep system command
+GREP    /bin/grep
+
+# Path to the find system command
+FIND    /usr/bin/find
+
+# Path to the tail system command
+TAIL    /usr/bin/tail
+
+# Path to the diff system command
+DIFF    /usr/bin/diff
+
+# Path to the rm system command
+RM      /bin/rm
+
+# Path to the SquidGuard program. You can set it to off to disable the
+# SquidGuard manager interface and get only the SquidClamav manager.
+SQUIDGUARD      /usr/bin/squidGuard
+
+# Path to the SquidGuard configuration file
+CONF_FILE       /etc/squidguard/squidGuard.conf
+
+# Path to the SquidClamav program. You can set it to off to disable the
+# SquidClamav manager interface and get only the SquidGuard manager.
+# If you use SquidClamav v6.x with the c-icap server, set this directive to
+# the value: c-icap
+SQUIDCLAMAV     off
+
+# Path to the c-icap control socket. Used by SquidClamav Manager to reload
+# c-icap server to apply SquidClamav configuration changes. Used only with
+# SquidClamav v6.x branch.
+C_ICAP_SOCKET
+
+# Path to the SquidClamav configuration file
+SC_CONF_FILE
+
+# Used to set the language, default is en_US.
+# Current translation are: en_US, fr_FR.
+LANG            en_US
+
+# Command to reload Squid. You may use the wrapper as squid
+# can only be reload as root. This wrapper will run the command
+# /usr/local/squid/sbin/squid -k reconfigure
+SQUID_WRAPPER   /var/www/squidguardmgr/squid_wrapper
+
+# SquidGuardMgr URL base where images are stored
+IMG_DIR         images
+
+# SquidGuardMgr Style Sheet CSS URL
+CSS_FILE        squidguardmgr.css
+
+# SquidGuardMgr Javascript URL
+JS_FILE         squidguardmgr.js
+
+# Comma separated list of DNS Blacklists
+#DNSBL  your.preferred.blacklist.com,other.preferred.blacklist.com
+
+# Number of last lines displayed from log files
+TAIL_LINES      1000
+
+# Keep added/removed items from squidGuard blocklists as diff file
+# to be able to recover change after a fresh download of blocklists
+KEEP_DIFF       1
+EOF
 }
 
 
@@ -5369,6 +5439,7 @@ a2enmod proxy_html
 a2enmod xml2enc
 a2enmod fcgid
 a2enmod passenger
+a2enmod cgi
 
 # Configuring Listen interfaces and ports
 echo "
@@ -5931,6 +6002,46 @@ cat << EOF > /etc/apache2/sites-enabled/roundcube.conf
     AllowOverride None
     Require all denied
    </Directory>
+
+</VirtualHost>
+EOF
+
+
+# ---------- squidguard.librerouter.net ---------- #
+
+# Creating certificate bundle
+rm -rf /etc/ssl/apache/squidguard/squidguard_bundle.crt
+cat /etc/ssl/apache/squidguard/squidguard_librerouter_net.crt /etc/ssl/apache/squidguard/squidguard_librerouter_net.ca-bundle >> /etc/ssl/apache/squidguard/squidguard_bundle.crt
+
+cat << EOF > /etc/apache2/sites-enabled/squidguard.conf
+# squidguard.librerouter.net http server
+<VirtualHost 10.0.0.246:80>
+    ServerAdmin admin@librerouter.net
+    DocumentRoot /var/www/html
+    ErrorLog \${APACHE_LOG_DIR}/squidgurad_error.log
+    CustomLog \${APACHE_LOG_DIR}/squidguard_access.log combined
+    RedirectMatch ^/$ https://squidguard.librerouter.net
+</VirtualHost>
+
+# squidguard.librerouter.net https server
+<VirtualHost 10.0.0.246:443>
+    ServerAdmin admin@librerouter.net
+    ServerName squidguard.librerouter.net
+    DocumentRoot /var/www/squidguardmgr
+    ErrorLog \${APACHE_LOG_DIR}/squidguard_error.log
+    CustomLog \${APACHE_LOG_DIR}/squidguard_access.log combined
+    SSLEngine on
+    SSLCertificateFile    /etc/ssl/nginx/squidguard/squidguard_bundle.crt
+    SSLCertificateKeyFile /etc/ssl/nginx/squidguard/squidguard_librerouter_net.key
+
+    <Directory /var/www/squidguardmgr>
+        Options +ExecCGI
+        AddHandler cgi-script .cgi
+        DirectoryIndex squidguardmgr.cgi
+        AllowOverride All
+        Order deny,allow
+        Allow from all
+    </Directory>
 
 </VirtualHost>
 EOF
