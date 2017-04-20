@@ -10,13 +10,14 @@ create_default_interfaces() {
   fi
   # in event /tmp/INT_interfaces doesn't exist, creates a default one with eth1 as was before
   if [ ! -e /tmp/INT_interfaces ]; then
-  INT_INTERFACE="eth1"
+  INT_INTERFACE="br1"
   cat << EOT >  /tmp/INT_interfaces
 
         #Internal network interface
         auto $INT_INTERFACE
         #allow-hotplug $INT_INTERFACE
         iface $INT_INTERFACE inet static
+            bridge_ports eth1 $lan_iface
             address 10.0.0.1
             netmask 255.255.255.0
             network 10.0.0.0
@@ -440,19 +441,28 @@ check_ifaces() {
          ups=$(cat /sys/class/net/$wired/operstate)
 
          # Put friendly names
-         if [ "$wired" == "eth0" ]; then wired="First cable port $wired"; fi
-         if [ "$wired" == "eth1" ]; then wired="Second cable port $wired"; fi
-         if [ "$wired" == "eth2" ]; then wired="Third cable port $wired"; fi
-         if [ "$wired" == "eth3" ]; then wired="Fourth cable port $wired"; fi
-         if [ "$wired" == "eth4" ]; then wired="Five cable port $wired"; fi
-         if [ "$wired" == "eth5" ]; then wired="Six cable port $wired"; fi
-         if [ "$wired" == "eth6" ]; then wired="Eight cable port $wired"; fi
-         if [ "$wired" == "wlan0" ]; then wired="First WIFI port $wired"; fi
-         if [ "$wired" == "wlan1" ]; then wired="Second WIFI port $wired"; fi
-         if [ "$wired" == "wlan2" ]; then wired="Third WIFI port $wired"; fi
-         if [ "$wired" == "wlan3" ]; then wired="Fourth WIFI port $wired"; fi
-         if [ "$wired" == "wlan4" ]; then wired="Five WIFI port $wired"; fi
+         if [ "$wired" == "eth0" ]; then wired="First cable port $wired";  eth0ip=$(ifconfig eth0 | grep addr: | cut -d : -f 2 | cut -d \  -f 1); 
+            if [ ${#eth0ip} -gt 3 ] && [[ ! $eth0ip =~ "10.0" ]]; then ups='"Conneted to Internet"'; fi
+            if [ $(brctl show | grep  $wired) -gt 3 ]; then ups='"Connected to BR1"'; fi
+         fi
+         if [ "$wired" == "eth1" ]; then wired="Second cable port $wired"; eth1ip=$(ifconfig eth1 | grep addr: | cut -d : -f 2 | cut -d \  -f 1); 
+            if [ ${#eth1ip} -gt 3 ] && [[ ! $eth1ip =~ "10.0" ]]; then ups='"Conneted to Internet"'; fi
+            if [ $(brctl show | grep  $wired) -gt 3 ]; then ups='"Connected to BR1"'; fi
+         fi
+         if [ "$wired" == "eth2" ]; then wired="Third cable port $wired";  eth2ip=$(ifconfig eth2 | grep addr: | cut -d : -f 2 | cut -d \  -f 1); fi
+         if [ "$wired" == "eth3" ]; then wired="Fourth cable port $wired"; eth3ip=$(ifconfig eth3 | grep addr: | cut -d : -f 2 | cut -d \  -f 1); fi
+         if [ "$wired" == "eth4" ]; then wired="Five cable port $wired";   eth4ip=$(ifconfig eth4 | grep addr: | cut -d : -f 2 | cut -d \  -f 1); fi
+         if [ "$wired" == "eth5" ]; then wired="Six cable port $wired";    eth5ip=$(ifconfig eth5 | grep addr: | cut -d : -f 2 | cut -d \  -f 1); fi
+         if [ "$wired" == "eth6" ]; then wired="Eight cable port $wired";  eth6ip=$(ifconfig eth6 | grep addr: | cut -d : -f 2 | cut -d \  -f 1); fi
+         if [ "$wired" == "wlan0" ]; then wired="First WIFI port $wired";  wlan0ip=$(ifconfig wlan0 | grep addr: | cut -d : -f 2 | cut -d \  -f 1); fi
+         if [ "$wired" == "wlan1" ]; then wired="Second WIFI port $wired"; wlan1ip=$(ifconfig wlan1 | grep addr: | cut -d : -f 2 | cut -d \  -f 1); fi
+         if [ "$wired" == "wlan2" ]; then wired="Third WIFI port $wired";  wlan2ip=$(ifconfig wlan2 | grep addr: | cut -d : -f 2 | cut -d \  -f 1); fi
+         if [ "$wired" == "wlan3" ]; then wired="Fourth WIFI port $wired"; wlan3ip=$(ifconfig wlan3 | grep addr: | cut -d : -f 2 | cut -d \  -f 1); fi
+         if [ "$wired" == "wlan4" ]; then wired="Five WIFI port $wired";   wlan4ip=$(ifconfig wlan4 | grep addr: | cut -d : -f 2 | cut -d \  -f 1); fi
+
+
          options="$options \"$wired\" $ups"
+
       fi
    fi
 
@@ -850,7 +860,7 @@ config_hostapd() {
 dialog --colors --defaultno --title "Librerouter Setup" --msgbox "\ZbIMPORTANT\ZB\n\nWrite your Access Point values:\n\nESSID: \Zb$essid\ZB\nKEY: \Zb$key\ZB\n\nYou will need it to configure your WIFI clients" 17 40 
     echo "interface=$lan_iface" > hostapd.conf
     chmod go-rwx hostapd.conf
-    echo "#bridge=eth0" >> hostapd.conf
+    echo "#bridge=br1" >> hostapd.conf
     echo "logger_syslog=-1" >> hostapd.conf
     echo "logger_syslog_level=2" >> hostapd.conf
     echo "logger_stdout=0" >> hostapd.conf
