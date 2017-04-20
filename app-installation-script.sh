@@ -2556,6 +2556,33 @@ fi
 
 
 # -----------------------------------------------
+# Function to install webconsole
+# -----------------------------------------------
+install_webconsole()
+{
+echo "Installing webconsole ..."  | tee -a /var/libre_install.log
+
+if [ ! -e /var/www/webconsole/webconsole.php ]; then
+    cd /var/www/
+    wget https://github.com/nickola/web-console/releases/download/v0.9.7/webconsole-0.9.7.zip
+
+    if [ $? -ne 0 ]; then
+        echo "Unable to download webconsole. Exiting ..." | tee -a /var/libre_install.log
+        # exit 3
+    fi
+
+    # Unzip webconsole package
+    unzip webconsole-0.9.7.zip
+
+    # Cleanup
+    rm -rf webconsole-0.9.7.zip
+
+    cd $INSTALL_HOME
+fi
+}
+
+
+# -----------------------------------------------
 # Function to install tahoe
 # -----------------------------------------------
 install_tahoe()
@@ -2788,6 +2815,7 @@ if [ "$PROCESSOR" = "Intel" -o "$PROCESSOR" = "AMD" -o "$PROCESSOR" = "ARM" ]; t
 	install_ntopng		 # Install ntopng package
 	install_postfix		 # Install postfixadmin package
 	install_upnp	 	 # Install miniupnp package
+        install_webconsole       # Install webconsole package
 	install_tahoe            # Install tahoe
         save_variables	         # Save detected variables
         install_atheros_firmware # Install free firmware for atheros devices from Github
