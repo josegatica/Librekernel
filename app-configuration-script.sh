@@ -6232,6 +6232,36 @@ cat << EOF > /etc/apache2/sites-enabled/waffle.conf
 EOF
 
 
+# ---------- webconsole.librerouter.net ---------- #
+
+# Creating certificate bundle
+rm -rf /etc/ssl/apache/webconsole/webconsole_bundle.crt
+cat /etc/ssl/apache/webconsole/webconsole_librerouter_net.crt /etc/ssl/apache/webconsole/webconsole_librerouter_net.ca-bundle >> /etc/ssl/apache/webconsole/webconsole_bundle.crt
+
+cat << EOF > /etc/apache2/sites-enabled/webconsole.conf
+# waffle.librerouter.net http server
+<VirtualHost 10.0.0.237:80>
+    ServerAdmin admin@librerouter.net
+    DocumentRoot /var/www/html
+    ErrorLog \${APACHE_LOG_DIR}/webconsole_error.log
+    CustomLog \${APACHE_LOG_DIR}/webconsole_access.log combined
+    RedirectMatch ^/$ https://webconsole.librerouter.net
+</VirtualHost>
+
+<VirtualHost 10.0.0.237:443>
+    ServerAdmin admin@librerouter.net
+    ServerName webconsole.librerouter.net
+    DocumentRoot /var/www/webconsole
+    DirectoryIndex webconsole.php
+    ErrorLog \${APACHE_LOG_DIR}/webconsole_error.log
+    CustomLog \${APACHE_LOG_DIR}/webconsole_access.log combined
+    SSLEngine on
+    SSLCertificateFile    /etc/ssl/apache/webconsole/webconsole_bundle.crt
+    SSLCertificateKeyFile /etc/ssl/apache/webconsole/webconsole_librerouter_net.key
+</VirtualHost>
+EOF
+
+
 # Restarting apache
 echo "Restarting apache web server ..." | tee -a /var/libre_config.log
 /etc/init.d/apache2 restart
@@ -7029,6 +7059,26 @@ fi
 
 
 # ---------------------------------------------------------
+# Function to configure webconsole
+# ---------------------------------------------------------
+configure_webconsole()
+{
+echo "Configuring webconsole ..."  | tee -a /var/libre_install.log
+
+# Creating webconsole users home directory
+mkdir -p /var/www/webconsole/home
+
+# Setting Webconsole user login and passoword
+WEB_PASS=`pwgen 10 1`
+sed "/\$USER = '';/c\$USER = 'web';" -i /var/www/webconsole/webconsole.php
+sed "/\$PASSWORD = '';/c\$PASSWORD = \'$WEB_PASS\';" -i /var/www/webconsole/webconsole.php
+
+# Setting webconsole users home directory
+sed "/\$HOME_DIRECTORY = '';/c\$HOME_DIRECTORY = '/var/www/webconsole/home';" -i /var/www/webconsole/webconsole.php
+}
+
+
+# ---------------------------------------------------------
 # Function to configure tahoe
 # ---------------------------------------------------------
 configure_tahoe()
@@ -7704,6 +7754,8 @@ echo "|      kibana  |                        |     kibana.librerouter.net |   1
 | tee -a /var/box_services
 echo "|      waffle  |                        |     waffle.librerouter.net |   10.0.0.238 |" \
 | tee -a /var/box_services
+echo "|  webconsole  |                        | webconsole.librerouter.net |   10.0.0.237 |" \
+| tee -a /var/box_services
 
 echo "------------------------------------------------------------------------------------" \
 | tee -a /var/box_services
@@ -7765,6 +7817,7 @@ cat << EOF >> /var/box_services
 |    sogo             |                                                      |
 |    glype            |                                                      |
 |    kibana           |                                                      |
+|    webconsole       |         web            |       $WEB_PASS              |  
 ------------------------------------------------------------------------------
 EOF
 
@@ -8019,6 +8072,7 @@ configure_gitlab 		# Configure gitlab servies (only for amd64)
 #configure_snortbarn		# Configure Snort and Barnyard services
 #configure_snorby		# Configure Snorby
 configure_upnp                  # configure miniupnp
+configure_webconsole            # configure webconsole service
 configure_tahoe			# Configure tahoe
 configure_tahoe2                # Configure tahoe 2
 #services_to_tor                # Redirect yacy and prosody traffic to tor
