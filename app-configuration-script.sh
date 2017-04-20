@@ -306,6 +306,7 @@ cat << EOF > /etc/hosts
 127.0.0.1       localhost.librenet librerouter localhost
 10.0.0.1        librerouter.librenet
 10.0.0.12       snorby.librenet
+10.0.0.237      webconsole.librerouter.net
 10.0.0.238      waffle.librerouter.net
 10.0.0.239      kibana.librerouter.net
 10.0.0.240      glype.librerouter.net
@@ -536,6 +537,13 @@ if [ "$PROCESSOR" = "Intel" -o "$PROCESSOR" = "AMD" -o "$PROCESSOR" = "ARM" ]; t
         #allow-hotplug $INT_INTERFACE:18
         iface $INT_INTERFACE:18 inet static
             address 10.0.0.238
+            netmask 255.255.255.0
+
+        #WebConsole
+        auto $INT_INTERFACE:19
+        #allow-hotplug $INT_INTERFACE:19
+        iface $INT_INTERFACE:19 inet static
+            address 10.0.0.237
             netmask 255.255.255.0
 EOF
 
@@ -835,6 +843,7 @@ iptables -t filter -F
 
 iptables -t nat -A PREROUTING -i $INT_INTERFACE -p tcp -d 10.0.0.11 -j ACCEPT
 iptables -t nat -A PREROUTING -i $INT_INTERFACE -p tcp -d 10.0.0.12 -j ACCEPT
+iptables -t nat -A PREROUTING -i $INT_INTERFACE -p tcp -d 10.0.0.237 -j ACCEPT
 iptables -t nat -A PREROUTING -i $INT_INTERFACE -p tcp -d 10.0.0.238 -j ACCEPT
 iptables -t nat -A PREROUTING -i $INT_INTERFACE -p tcp -d 10.0.0.239 -j ACCEPT
 iptables -t nat -A PREROUTING -i $INT_INTERFACE -p tcp -d 10.0.0.240 -j ACCEPT
@@ -1839,6 +1848,7 @@ local-data: "librerouter.librenet. IN A 10.0.0.1"
 local-data: "i2p.librenet. IN A 10.0.0.1"
 local-data: "tahoe.librenet. IN A 10.0.0.1"
 local-data: "snorby.librenet. IN A 10.0.0.12"
+local-data: "webconsole.librerouter.net. IN A 10.0.0.237"
 local-data: "waffle.librerouter.net. IN A 10.0.0.238"
 local-data: "kibana.librerouter.net. IN A 10.0.0.239"
 local-data: "glype.librerouter.net. IN A 10.0.0.240"
@@ -5505,6 +5515,10 @@ Listen 10.0.0.238:443
 # Webmin
 Listen 10.0.0.245:80
 Listen 10.0.0.245:443
+
+# Webconsole
+Listen 10.0.0.237:80
+Listen 10.0.0.237:443
 
 " /etc/apache2/ports.conf
 
