@@ -540,6 +540,7 @@ elif [ $PLATFORM = "D8" ]; then
         librrds-perl libapache2-mod-php5- apache2-prefork-dev \
         libmysqlclient-dev wkhtmltopdf libpcre3 mysql-server \
 	mysql-client-5.5 iw rfkill \
+        libfile-tail-perl libfile-pid-perl libwww-perl \
         2>&1 > /var/apt-get-install_1.log
 
 	# services
