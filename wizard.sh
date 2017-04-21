@@ -443,22 +443,64 @@ check_ifaces() {
          # Put friendly names
          if [ "$wired" == "eth0" ]; then wired="First cable port $wired";  eth0ip=$(ifconfig eth0 | grep addr: | cut -d : -f 2 | cut -d \  -f 1); 
             if [ ${#eth0ip} -gt 3 ] && [[ ! $eth0ip =~ "10.0" ]]; then ups='"Conneted to Internet"'; fi
+            if [ ${#eth0ip} -gt 3 ] && [[  $eth0ip =~ "10.0" ]]; then ups='"Conneted to Internal Secure LAN"'; fi
             if [ $(brctl show | grep  $wired) -gt 3 ]; then ups='"Connected to BR1"'; fi
          fi
          if [ "$wired" == "eth1" ]; then wired="Second cable port $wired"; eth1ip=$(ifconfig eth1 | grep addr: | cut -d : -f 2 | cut -d \  -f 1); 
             if [ ${#eth1ip} -gt 3 ] && [[ ! $eth1ip =~ "10.0" ]]; then ups='"Conneted to Internet"'; fi
+            if [ ${#eth1ip} -gt 3 ] && [[  $eth1ip =~ "10.0" ]]; then ups='"Conneted to Internal Secure LAN"'; fi
             if [ $(brctl show | grep  $wired) -gt 3 ]; then ups='"Connected to BR1"'; fi
          fi
-         if [ "$wired" == "eth2" ]; then wired="Third cable port $wired";  eth2ip=$(ifconfig eth2 | grep addr: | cut -d : -f 2 | cut -d \  -f 1); fi
-         if [ "$wired" == "eth3" ]; then wired="Fourth cable port $wired"; eth3ip=$(ifconfig eth3 | grep addr: | cut -d : -f 2 | cut -d \  -f 1); fi
-         if [ "$wired" == "eth4" ]; then wired="Five cable port $wired";   eth4ip=$(ifconfig eth4 | grep addr: | cut -d : -f 2 | cut -d \  -f 1); fi
-         if [ "$wired" == "eth5" ]; then wired="Six cable port $wired";    eth5ip=$(ifconfig eth5 | grep addr: | cut -d : -f 2 | cut -d \  -f 1); fi
-         if [ "$wired" == "eth6" ]; then wired="Eight cable port $wired";  eth6ip=$(ifconfig eth6 | grep addr: | cut -d : -f 2 | cut -d \  -f 1); fi
-         if [ "$wired" == "wlan0" ]; then wired="First WIFI port $wired";  wlan0ip=$(ifconfig wlan0 | grep addr: | cut -d : -f 2 | cut -d \  -f 1); fi
-         if [ "$wired" == "wlan1" ]; then wired="Second WIFI port $wired"; wlan1ip=$(ifconfig wlan1 | grep addr: | cut -d : -f 2 | cut -d \  -f 1); fi
-         if [ "$wired" == "wlan2" ]; then wired="Third WIFI port $wired";  wlan2ip=$(ifconfig wlan2 | grep addr: | cut -d : -f 2 | cut -d \  -f 1); fi
-         if [ "$wired" == "wlan3" ]; then wired="Fourth WIFI port $wired"; wlan3ip=$(ifconfig wlan3 | grep addr: | cut -d : -f 2 | cut -d \  -f 1); fi
-         if [ "$wired" == "wlan4" ]; then wired="Five WIFI port $wired";   wlan4ip=$(ifconfig wlan4 | grep addr: | cut -d : -f 2 | cut -d \  -f 1); fi
+         if [ "$wired" == "eth2" ]; then wired="Third cable port $wired";  eth2ip=$(ifconfig eth2 | grep addr: | cut -d : -f 2 | cut -d \  -f 1); 
+            if [ ${#eth2ip} -gt 3 ] && [[ ! $eth2ip =~ "10.0" ]]; then ups='"Conneted to Internet"'; fi
+            if [ ${#eth2ip} -gt 3 ] && [[  $eth2ip =~ "10.0" ]]; then ups='"Conneted to Internal Secure LAN"'; fi
+            if [ $(brctl show | grep  $wired) -gt 3 ]; then ups='"Connected to BR1"'; fi
+         fi
+         if [ "$wired" == "eth3" ]; then wired="Fourth cable port $wired"; eth3ip=$(ifconfig eth3 | grep addr: | cut -d : -f 2 | cut -d \  -f 1); 
+            if [ ${#eth3ip} -gt 3 ] && [[ ! $eth3ip =~ "10.0" ]]; then ups='"Conneted to Internet"'; fi
+            if [ ${#eth3ip} -gt 3 ] && [[  $eth3ip =~ "10.0" ]]; then ups='"Conneted to Internal Secure LAN"'; fi
+            if [ $(brctl show | grep  $wired) -gt 3 ]; then ups='"Connected to BR1"'; fi
+         fi
+         if [ "$wired" == "eth4" ]; then wired="Five cable port $wired";   eth4ip=$(ifconfig eth4 | grep addr: | cut -d : -f 2 | cut -d \  -f 1); 
+            if [ ${#eth4ip} -gt 3 ] && [[ ! $eth4ip =~ "10.0" ]]; then ups='"Conneted to Internet"'; fi
+            if [ ${#eth4ip} -gt 3 ] && [[  $eth4ip =~ "10.0" ]]; then ups='"Conneted to Internal Secure LAN"'; fi
+            if [ $(brctl show | grep  $wired) -gt 3 ]; then ups='"Connected to BR1"'; fi
+         fi
+         if [ "$wired" == "eth5" ]; then wired="Six cable port $wired";    eth5ip=$(ifconfig eth5 | grep addr: | cut -d : -f 2 | cut -d \  -f 1); 
+            if [ ${#eth5ip} -gt 3 ] && [[ ! $eth5ip =~ "10.0" ]]; then ups='"Conneted to Internet"'; fi
+            if [ ${#eth5ip} -gt 3 ] && [[  $eth5ip =~ "10.0" ]]; then ups='"Conneted to Internal Secure LAN"'; fi
+            if [ $(brctl show | grep  $wired) -gt 3 ]; then ups='"Connected to BR1"'; fi
+         fi
+         if [ "$wired" == "eth6" ]; then wired="Eight cable port $wired";  eth6ip=$(ifconfig eth6 | grep addr: | cut -d : -f 2 | cut -d \  -f 1); 
+            if [ ${#eth6ip} -gt 3 ] && [[ ! $eth6ip =~ "10.0" ]]; then ups='"Conneted to Internet"'; fi
+            if [ ${#eth6ip} -gt 3 ] && [[  $eth6ip =~ "10.0" ]]; then ups='"Conneted to Internal Secure LAN"'; fi
+            if [ $(brctl show | grep  $wired) -gt 3 ]; then ups='"Connected to BR1"'; fi
+         fi
+         if [ "$wired" == "wlan0" ]; then wired="First WIFI port $wired";  wlan0ip=$(ifconfig wlan0 | grep addr: | cut -d : -f 2 | cut -d \  -f 1); 
+            if [ ${#wlan0ip} -gt 3 ] && [[ ! $wlan0ip =~ "10.0" ]]; then ups='"Conneted to Internet"'; fi
+            if [ ${#wlan0ip} -gt 3 ] && [[  $wlan0ip =~ "10.0" ]]; then ups='"Conneted to Internal Secure LAN"'; fi
+            if [ $(brctl show | grep  $wired) -gt 3 ]; then ups='"Connected to BR1"'; fi
+         fi
+         if [ "$wired" == "wlan1" ]; then wired="Second WIFI port $wired"; wlan1ip=$(ifconfig wlan1 | grep addr: | cut -d : -f 2 | cut -d \  -f 1); 
+            if [ ${#wlan1ip} -gt 3 ] && [[ ! $wlan1ip =~ "10.0" ]]; then ups='"Conneted to Internet"'; fi
+            if [ ${#wlan1ip} -gt 3 ] && [[  $wlan1ip =~ "10.0" ]]; then ups='"Conneted to Internal Secure LAN"'; fi
+            if [ $(brctl show | grep  $wired) -gt 3 ]; then ups='"Connected to BR1"'; fi
+         fi
+         if [ "$wired" == "wlan2" ]; then wired="Third WIFI port $wired";  wlan2ip=$(ifconfig wlan2 | grep addr: | cut -d : -f 2 | cut -d \  -f 1); 
+            if [ ${#wlan2ip} -gt 3 ] && [[ ! $wlan2ip =~ "10.0" ]]; then ups='"Conneted to Internet"'; fi
+            if [ ${#wlan2ip} -gt 3 ] && [[  $wlan2ip =~ "10.0" ]]; then ups='"Conneted to Internal Secure LAN"'; fi
+            if [ $(brctl show | grep  $wired) -gt 3 ]; then ups='"Connected to BR1"'; fi
+         fi
+         if [ "$wired" == "wlan3" ]; then wired="Fourth WIFI port $wired"; wlan3ip=$(ifconfig wlan3 | grep addr: | cut -d : -f 2 | cut -d \  -f 1); 
+            if [ ${#wlan3ip} -gt 3 ] && [[ ! $wlan3ip =~ "10.0" ]]; then ups='"Conneted to Internet"'; fi
+            if [ ${#wlan3ip} -gt 3 ] && [[  $wlan3ip =~ "10.0" ]]; then ups='"Conneted to Internal Secure LAN"'; fi
+            if [ $(brctl show | grep  $wired) -gt 3 ]; then ups='"Connected to BR1"'; fi
+         fi
+         if [ "$wired" == "wlan4" ]; then wired="Five WIFI port $wired";   wlan4ip=$(ifconfig wlan4 | grep addr: | cut -d : -f 2 | cut -d \  -f 1); 
+            if [ ${#wlan4ip} -gt 3 ] && [[ ! $wlan4ip =~ "10.0" ]]; then ups='"Conneted to Internet"'; fi
+            if [ ${#wlan4ip} -gt 3 ] && [[  $wlan4ip =~ "10.0" ]]; then ups='"Conneted to Internal Secure LAN"'; fi
+            if [ $(brctl show | grep  $wired) -gt 3 ]; then ups='"Connected to BR1"'; fi
+         fi
 
 
          options="$options \"$wired\" $ups"
@@ -481,7 +523,7 @@ no_internet() {
   # 
   rm /tmp/inet_iface 2> /dev/null
   if [ ! $inet_iface ]; then
-    dialog --colors --title "Librerouter Setup" --menu "Please select the interface you are using to connect to internet router (wan): " 25 40 55 --file /tmp/options 2> /tmp/inet_iface
+    dialog --colors --title "Librerouter Setup" --menu "Please select the interface you are using to connect to internet router (wan): " 25 60 55 --file /tmp/options 2> /tmp/inet_iface
     retval=$?
     if [ $retval == "1" ]; then
       main_menu
