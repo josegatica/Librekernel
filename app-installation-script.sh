@@ -986,14 +986,13 @@ install_waffle() {
         apt-get install -y --force-yes php5-geoip php-apc
 
 
+        rm -rf /usr/local/waf-fle
         mkdir -p /usr/local/waf-fle/
-        cd /usr/local/waf-fle/
-        rm -rf /usr/local/waf-fle/*
 
 
-        if [ ! -e waf-fle-master.zip ]; then
+        if [ ! -e waf-fle ]; then
                 echo "Downloading waf-fle ..." | tee -a /var/libre_install.log
-                wget https://github.com/klaubert/waf-fle/archive/master.zip
+                git clone https://github.com/klaubert/waf-fle/
                 if [ $? -ne 0 ]; then
                         echo "Unable to download waf-fle. Exiting ..." | tee -a /var/libre_install.log
                         # exit 3
@@ -1001,9 +1000,7 @@ install_waffle() {
         fi
       
         # Decompressing package
-        unzip master.zip -d /usr/local/waf-fle/
-        cp -r /usr/local/waf-fle/waf-fle-master/* /usr/local/waf-fle/
-        rm -rf /usr/local/waf-fle/waf-fle-master/
+        cp -r waf-fle/ /usr/local/
 
         # Download MaxMind GeoIP Database
 	
