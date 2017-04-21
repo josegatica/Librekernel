@@ -5533,10 +5533,9 @@ cat << EOF > /etc/apache2/sites-enabled/yacy.conf
 # search.librerouter.net http server
 <VirtualHost 10.0.0.251:80>
     ServerAdmin admin@librerouter.net
-    DocumentRoot /var/www/html
     ErrorLog \${APACHE_LOG_DIR}/search_error.log
     CustomLog \${APACHE_LOG_DIR}/search_access.log combined
-    RedirectMatch ^/$ https://search.librerouter.net
+    Redirect "/" "https://search.librerouter.net/"
     # rewrite ^/search(.*) http://\$server_name/yacysearch.html?query=\$arg_q? last;
 </VirtualHost>
 
@@ -5544,7 +5543,6 @@ cat << EOF > /etc/apache2/sites-enabled/yacy.conf
 <VirtualHost 10.0.0.251:443>
     ServerAdmin admin@librerouter.net
     ServerName search.librerouter.net
-    DocumentRoot /var/www/html
     ErrorLog \${APACHE_LOG_DIR}/search_error.log
     CustomLog \${APACHE_LOG_DIR}/search_access.log combined
     SSLEngine on
@@ -5567,23 +5565,21 @@ cat << EOF > /etc/apache2/sites-enabled/easyrtc.conf
 # conference.librerouter.net http server
 <VirtualHost 10.0.0.250:80>
     ServerAdmin admin@librerouter.net
-    DocumentRoot /var/www/html
     ErrorLog \${APACHE_LOG_DIR}/conference_error.log
     CustomLog \${APACHE_LOG_DIR}/conference_access.log combined
-    RedirectMatch ^/$ https://conference.librerouter.net/demos/demo_multiparty.html
+    Redirect "/" "https://conference.librerouter.net/"
 </VirtualHost>
 
 # conference.librerouter.net https server
 <VirtualHost 10.0.0.250:443>
     ServerAdmin admin@librerouter.net
     ServerName conference.librerouter.net
-    DocumentRoot /var/www/html
     ErrorLog \${APACHE_LOG_DIR}/conference_error.log
     CustomLog \${APACHE_LOG_DIR}/conference_access.log combined
     SSLEngine on
     SSLCertificateFile    /etc/ssl/apache/conference/conference_bundle.crt
     SSLCertificateKeyFile /etc/ssl/apache/conference/conference_librerouter_net.key
-    # RedirectMatch ^/$ /demos/demo_multiparty.html
+    RedirectMatch ^/$ /demos/demo_multiparty.html
     # rewrite ^/$ /demos/demo_multiparty.html permanent
     ProxyPreserveHost On   
     ProxyPass / http://127.0.0.1:8443/
@@ -5602,17 +5598,15 @@ cat << EOF > /etc/apache2/sites-enabled/webmin.conf
 # conference.librerouter.net http server
 <VirtualHost 10.0.0.245:80>
     ServerAdmin admin@librerouter.net
-    DocumentRoot /var/www/html
     ErrorLog \${APACHE_LOG_DIR}/webmin_error.log
     CustomLog \${APACHE_LOG_DIR}/webmin_access.log combined
-    RedirectMatch ^/$ https://webmin.librerouter.net
+    Redirect "/" "https://webmin.librerouter.net/"
 </VirtualHost>
 
 # conference.librerouter.net https server
 <VirtualHost 10.0.0.245:443>
     ServerAdmin admin@librerouter.net
     ServerName webmin.librerouter.net
-    DocumentRoot /var/www/html
     ErrorLog \${APACHE_LOG_DIR}/webmin_error.log
     CustomLog \${APACHE_LOG_DIR}/webmin_access.log combined
     SSLEngine on
@@ -5635,17 +5629,15 @@ cat << EOF > /etc/apache2/sites-enabled/ntop.conf
 # ntop.librerouter.net http server
 <VirtualHost 10.0.0.244:80>
     ServerAdmin admin@librerouter.net
-    DocumentRoot /var/www/html
     ErrorLog \${APACHE_LOG_DIR}/ntop_error.log
     CustomLog \${APACHE_LOG_DIR}/ntop_access.log combined
-    RedirectMatch ^/$ https://ntop.librerouter.net
+    Redirect "/" "https://ntop.librerouter.net/"
 </VirtualHost>
 
 # ntop.librerouter.net https server
 <VirtualHost 10.0.0.244:443>
     ServerAdmin admin@librerouter.net
     ServerName ntop.librerouter.net
-    DocumentRoot /var/www/html
     ErrorLog \${APACHE_LOG_DIR}/ntop_error.log
     CustomLog \${APACHE_LOG_DIR}/ntop_access.log combined
     SSLEngine on
@@ -5670,17 +5662,15 @@ cat << EOF > /etc/apache2/sites-enabled/glype.conf
 # glype.librerouter.net http server
 <VirtualHost 10.0.0.240:80>
     ServerAdmin admin@librerouter.net
-    DocumentRoot /var/www/html
     ErrorLog \${APACHE_LOG_DIR}/glype_error.log
     CustomLog \${APACHE_LOG_DIR}/glype_access.log combined
-    RedirectMatch ^/$ https://glype.librerouter.net
+    Redirect "/" "https://glype.librerouter.net/"
 </VirtualHost>
 
 # glype.librerouter.net https server
 <VirtualHost 10.0.0.240:443>
     ServerAdmin admin@librerouter.net
     ServerName glype.librerouter.net
-    DocumentRoot /var/www/glype
     DirectoryIndex index.php index.html index.htm
     ErrorLog \${APACHE_LOG_DIR}/glype_error.log
     CustomLog \${APACHE_LOG_DIR}/glype_access.log combined
@@ -5701,10 +5691,9 @@ cat << EOF > /etc/apache2/sites-enabled/sogo.conf
 # sogo.librerouter.net http server
 <VirtualHost 10.0.0.241:80>
     ServerAdmin admin@librerouter.net
-    DocumentRoot /var/www/html
     ErrorLog \${APACHE_LOG_DIR}/error.log
     CustomLog \${APACHE_LOG_DIR}/access.log combined
-    RedirectMatch ^/$ https://sogo.librerouter.net
+    Redirect "/" "https://sogo.librerouter.net/"
 </VirtualHost>
 
 # sogo.librerouter.net https server
@@ -5831,10 +5820,9 @@ cat << EOF > /etc/apache2/sites-enabled/redmine.conf
 # redmine.librerouter.net http server
 <VirtualHost 10.0.0.249:80>
     ServerAdmin admin@librerouter.net
-    DocumentRoot /var/www/
     ErrorLog \${APACHE_LOG_DIR}/redmine_error.log
     CustomLog \${APACHE_LOG_DIR}/redmine_access.log combined
-    RedirectMatch ^/$ https://redmine.librerouter.net
+    Redirect "/" "https://redmine.librerouter.net/"
 </VirtualHost>
 
 # redmine.librerouter.net https server
@@ -5873,10 +5861,9 @@ cat << EOF > /etc/apache2/sites-enabled/storage.conf
 # storage.librerouter.net http server
 <VirtualHost 10.0.0.253:80>
     ServerAdmin admin@librerouter.net
-    DocumentRoot /var/www/
     ErrorLog \${APACHE_LOG_DIR}/storage_error.log
     CustomLog \${APACHE_LOG_DIR}/storage_access.log combined
-    RedirectMatch ^/$ https://storage.librerouter.net
+    Redirect "/" "https://storage.librerouter.net/"
 </VirtualHost>
 
 # storage.librerouter.net https server
@@ -5918,10 +5905,9 @@ cat << EOF > /etc/apache2/sites-enabled/roundcube.conf
 # roundcube.librerouter.net http server
 <VirtualHost 10.0.0.243:80>
     ServerAdmin admin@librerouter.net
-    DocumentRoot /var/www/
     ErrorLog \${APACHE_LOG_DIR}/roundcube_error.log
     CustomLog \${APACHE_LOG_DIR}/roundcube_access.log combined
-    RedirectMatch ^/$ https://roundcube.librerouter.net
+    Redirect "/" "https://roundcube.librerouter.net/"
 </VirtualHost>
 
 # roundcube.librerouter.net https server
@@ -6031,10 +6017,9 @@ cat << EOF > /etc/apache2/sites-enabled/squidguard.conf
 # squidguard.librerouter.net http server
 <VirtualHost 10.0.0.246:80>
     ServerAdmin admin@librerouter.net
-    DocumentRoot /var/www/html
     ErrorLog \${APACHE_LOG_DIR}/squidgurad_error.log
     CustomLog \${APACHE_LOG_DIR}/squidguard_access.log combined
-    RedirectMatch ^/$ https://squidguard.librerouter.net
+    Redirect "/" "https://squidguard.librerouter.net/"
 </VirtualHost>
 
 # squidguard.librerouter.net https server
@@ -6071,17 +6056,15 @@ cat << EOF > /etc/apache2/sites-enabled/mailpile.conf
 # email.librerouter.net http server
 <VirtualHost 10.0.0.254:80>
     ServerAdmin admin@librerouter.net
-    DocumentRoot /var/www/html
     ErrorLog \${APACHE_LOG_DIR}/email_error.log
     CustomLog \${APACHE_LOG_DIR}/email_access.log combined
-    RedirectMatch ^/$ https://email.librerouter.net
+    Redirect "/" "https://email.librerouter.net/"
 </VirtualHost>
 
 # email.librerouter.net https server
 <VirtualHost 10.0.0.254:443>
     ServerAdmin admin@librerouter.net
     ServerName email.librerouter.net
-    DocumentRoot /var/www/html
     ErrorLog \${APACHE_LOG_DIR}/email_error.log
     CustomLog \${APACHE_LOG_DIR}/email_access.log combined
     SSLEngine on
@@ -6104,17 +6087,15 @@ cat << EOF > /etc/apache2/sites-enabled/kibana.conf
 # kibana.librerouter.net http server
 <VirtualHost 10.0.0.239:80>
     ServerAdmin admin@librerouter.net
-    DocumentRoot /var/www/html
     ErrorLog \${APACHE_LOG_DIR}/kibana_error.log
     CustomLog \${APACHE_LOG_DIR}/kibana_access.log combined
-    RedirectMatch ^/$ https://kibana.librerouter.net
+    Redirect "/" "https://kibana.librerouter.net/"
 </VirtualHost>
 
 # kibana.librerouter.net https server
 <VirtualHost 10.0.0.239:443>
     ServerAdmin admin@librerouter.net
     ServerName kibana.librerouter.net
-    DocumentRoot /var/www/html
     ErrorLog \${APACHE_LOG_DIR}/kibana_error.log
     CustomLog \${APACHE_LOG_DIR}/kibana_access.log combined
     SSLEngine on
@@ -6137,10 +6118,9 @@ cat << EOF > /etc/apache2/sites-enabled/postfix.conf
 # postfix.librerouter.net http server
 <VirtualHost 10.0.0.242:80>
     ServerAdmin admin@librerouter.net
-    DocumentRoot /var/www/html
     ErrorLog \${APACHE_LOG_DIR}/postfix_error.log
     CustomLog \${APACHE_LOG_DIR}/postfix_access.log combined
-    RedirectMatch ^/$ https://postfix.librerouter.net
+    Redirect "/" "https://postfix.librerouter.net/"
 </VirtualHost>
 
 # postfix.librerouter.net https server
@@ -6167,10 +6147,9 @@ cat << EOF > /etc/apache2/sites-enabled/friendica.conf
 # social.librerouter.net http server
 <VirtualHost 10.0.0.252:80>
     ServerAdmin admin@librerouter.net
-    DocumentRoot /var/www/html
     ErrorLog \${APACHE_LOG_DIR}/social_error.log
     CustomLog \${APACHE_LOG_DIR}/social_access.log combined
-    RedirectMatch ^/$ https://social.librerouter.net
+    Redirect "/" "https://social.librerouter.net/"
 </VirtualHost>
 
 # social.librerouter.net https server
@@ -6205,10 +6184,9 @@ cat << EOF > /etc/apache2/sites-enabled/waffle.conf
 # waffle.librerouter.net http server
 <VirtualHost 10.0.0.238:80>
     ServerAdmin admin@librerouter.net
-    DocumentRoot /var/www/html
     ErrorLog \${APACHE_LOG_DIR}/waffle_error.log
     CustomLog \${APACHE_LOG_DIR}/waffle_access.log combined
-    RedirectMatch ^/$ https://waffle.librerouter.net
+    Redirect "/" "https://waffle.librerouter.net/"
 </VirtualHost>
 
 # waffle.librerouter.net https server
@@ -6242,10 +6220,9 @@ cat << EOF > /etc/apache2/sites-enabled/webconsole.conf
 # waffle.librerouter.net http server
 <VirtualHost 10.0.0.237:80>
     ServerAdmin admin@librerouter.net
-    DocumentRoot /var/www/html
     ErrorLog \${APACHE_LOG_DIR}/webconsole_error.log
     CustomLog \${APACHE_LOG_DIR}/webconsole_access.log combined
-    RedirectMatch ^/$ https://webconsole.librerouter.net
+    Redirect "/" "https://webconsole.librerouter.net/"
 </VirtualHost>
 
 <VirtualHost 10.0.0.237:443>
