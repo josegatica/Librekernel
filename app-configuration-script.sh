@@ -3882,26 +3882,47 @@ echo "Starting Mailpile local service ..." | tee -a /var/libre_config.log
 configure_modsecurity()
 {
 echo "Configuring modsecurity ..." | tee -a /var/libre_config.log
-cp /usr/src/modsecurity/modsecurity.conf-recommended /etc/nginx/modsecurity.conf
-cp /usr/src/modsecurity/unicode.mapping /etc/nginx/
+sudo mv /etc/modsecurity/modsecurity.conf-recommended /etc/modsecurity/modsecurity.conf
+sudo sed -i "s/SecRuleEngine DetectionOnly/SecRuleEngine On/" /etc/modsecurity/modsecurity.conf
+sudo sed -i "s/SecResponseBodyAccess On/SecResponseBodyAccess Off/" /etc/modsecurity/modsecurity.conf
+
+#cp /usr/src/modsecurity/modsecurity.conf-recommended /etc/nginx/modsecurity.conf
+#cp /usr/src/modsecurity/unicode.mapping /etc/nginx/
 
 # Creating new directory for the ModSecurity audit log
 mkdir -p /opt/modsecurity/var/audit/
 chown -R www-data:www-data /opt/modsecurity/var/audit/
 
 # Creating modsecurity configuration
-cat << EOF >> /etc/nginx/modsecurity.conf
+#cat << EOF >> /etc/nginx/modsecurity.conf
 #DefaultAction
-SecDefaultAction "log,deny,phase:1"
-
+#SecDefaultAction "log,deny,phase:1"
+#
 #If you want to load single rule /usr/loca/nginx/conf
 #Include base_rules/modsecurity_crs_41_sql_injection_attacks.conf
-
+#
 #Load all Rule
-Include base_rules/*.conf
-
+#Include base_rules/*.conf
+#
 #Disable rule by ID from error message (for my wordpress)
-SecRuleRemoveById 981172 981173 960032 960034 960017 960010 950117 981004 960015
+#SecRuleRemoveById 981172 981173 960032 960034 960017 960010 950117 981004 960015
+#EOF
+
+# modsecurity apaches module configuration
+mv /usr/src/owasp-modsecurity-crs/rules/RESPONSE-950-DATA-LEAKAGES.conf /usr/src/owasp-modsecurity-crs/rules/RESPONSE-950-DATA-LEAKAGES
+cat << EOF > /etc/apache2/mods-enabled/security2.conf
+<IfModule security2_module>
+        # Default Debian dir for modsecurity's persistent data
+        SecDataDir /var/cache/modsecurity
+
+        # Include all the *.conf files in /etc/modsecurity.
+        # Keeping your local configuration in that directory
+        # will allow for an easy upgrade of THIS file and
+        # make your life easier
+        IncludeOptional /etc/modsecurity/*.conf
+        Include /usr/src/owasp-modsecurity-crs/crs-setup.conf.example
+        Include /usr/src/owasp-modsecurity-crs/rules/*.conf
+</IfModule>
 EOF
 }
 
