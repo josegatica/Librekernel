@@ -4,20 +4,19 @@
 
 Suported devices :
 
-- 100% open source:
+- 100% open source open Hardware Solidrun Clearfog.
 
-open Hardware Solidrun Clearfog.
+
 
 Mini servers:
 - Gole1
-- Qotom  (recomended)
+- Qotom X8,x9s,x10
 - Pipo x10 and modified.
 
 Any Laptop, PC or server
 
 Tablets:
 - Chwi Hi10 or Chwi hi12
-- Teclast 
 - Onda V919 Air CH
 - Teclast X89
 
