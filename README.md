@@ -2,11 +2,11 @@
 
 # Setting up the lab in physical:
 
-Suported devices that we need to add a usb to ethernet and 2 atheros wireless network interfaces:
+Suported devices :
 
-100% open source open Hardware:
+- 100% open source:
 
-Solidrun Clearfog.
+open Hardware Solidrun Clearfog.
 
 Mini servers:
 - Gole1
@@ -21,6 +21,7 @@ Tablets:
 - Onda V919 Air CH
 - Teclast X89
 
+You need to add a usb to ethernet adaptor or a second ethernet nic and 2 atheros (non firmaware required) wireless network interfaces.
 
 # Setting up the lab in Virtual:
 
