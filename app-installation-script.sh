@@ -481,33 +481,7 @@ install_packages()
 	apt-get update 2>&1 > /var/apt-get-update.log
 	echo "Installing packages ... " | tee -a /var/libre_install.log
 
-# Installing Packages for Debian 7 GNU/Linux
-
-if [ $PLATFORM = "D7" ]; then
-	DEBIAN_FRONTEND=noninteractive 
-	apt-get install -y --force-yes \
-	privoxy nginx php5-common \
-	php5-fpm php5-cli php5-json php5-mysql php5-curl php5-intl \
-	php5-mcrypt php5-memcache php-xml-parser php-pear unbound owncloud \
-	node npm apache2-mpm-prefork- apache2-utils- apache2.2-bin- \
-	apache2.2-common- openjdk-7-jre-headless phpmyadmin php5 \
-	mysql-server php5-gd php5-imap smarty3 git ntpdate macchanger \
-	bridge-utils hostapd isc-dhcp-server hostapd bridge-utils \
-	curl macchanger ntpdate tor bc sudo lsb-release dnsutils \
-	ca-certificates-java openssh-server ssh wireless-tools usbutils \
-	unzip debian-keyring subversion build-essential libncurses5-dev \
-	i2p i2p-keyring yacy virtualenv pwgen \
-        killyourtv-keyring squidguard \
-	c-icap clamav  clamav-daemon  gcc make libcurl4-gnutls-dev libicapapi-dev \
-	deb.torproject.org-keyring u-boot-tools console-tools \
-        gnupg openssl python-virtualenv python-pip python-lxml git \
-        libjpeg62-turbo libjpeg62-turbo-dev zlib1g-dev python-dev webmin \
-        postfix mailutils aptitude fail2ban libsystemd-dev \
-	2>&1 > /var/apt-get-install.log
-
-# Installing Packages for Debian 8 GNU/Linux
-
-elif [ $PLATFORM = "D8" ]; then
+if [ $PLATFORM = "D8" ]; then
 	DEBIAN_FRONTEND=noninteractive
  	
 	# libs and tools
@@ -516,7 +490,7 @@ elif [ $PLATFORM = "D8" ]; then
         php5-curl php5-intl php5-mcrypt php5-memcache \
         php-xml-parser php-pear phpmyadmin php5 mailutils \
         apache2 libapache2-mod-php5 libapache2-modsecurity \
-        rbapache2-mod-fcgid libapache2-mod-passenger pcbind- exim4- \
+        libapache2-mod-fcgid libapache2-mod-passenger exim4- \
         openjdk-7-jre-headless uwsgi \
         php5-gd php5-imap smarty3 git ntpdate macchanger \
         bridge-utils hostapd librrd-dev \
@@ -553,54 +527,6 @@ elif [ $PLATFORM = "D8" ]; then
         amavis spamassassin php5-imap fail2ban libsystemd-dev \
         2>&1 > /var/apt-get-install_2.log
 
-        #bro passenger logstash kibana nginx nginx-extras libcurl4-openssl-dev \
-
-# Installing Packages for Trisquel 7.0 GNU/Linux
-
-elif [ $PLATFORM = "T7" ]; then
-	DEBIAN_FRONTEND=noninteractive 
-	apt-get install -y --force-yes \
-	privoxy nginx php5-common \
-	php5-fpm php5-cli php5-json php5-mysql php5-curl php5-intl \
-	php5-mcrypt php5-memcache php-xml-parser php-pear unbound owncloud \
-	node npm apache2-mpm-prefork- apache2-utils- apache2.2-bin- \
-	apache2.2-common- openjdk-7-jre-headless phpmyadmin php5 \
-	mysql-server php5-gd php5-imap smarty3 git ntpdate macchanger \
-	bridge-utils hostapd isc-dhcp-server hostapd bridge-utils \
-	curl macchanger ntpdate tor bc sudo lsb-release dnsutils \
-	ca-certificates-java openssh-server ssh wireless-tools usbutils \
-	unzip debian-keyring subversion build-essential libncurses5-dev \
-	i2p i2p-keyring yacy virtualenv pwgen \
-	killyourtv-keyring squidguard \
-	c-icap clamav  clamav-daemon  gcc make libcurl4-gnutls-dev libicapapi-dev \
-	deb.torproject.org-keyring u-boot-tools console-setup \
-        gnupg openssl python-virtualenv python-pip python-lxml git \
-        libjpeg62-turbo libjpeg62-turbo-dev zlib1g-dev python-dev \
-        postfix mailutils aptitude fail2ban \
-	2>&1 > /var/apt-get-install.log
-
-# Installing Packages for Ubuntu 14.04 GNU/Linux
-
-elif [ $PLATFORM = "U14" -o $PLATFORM = "U12" ]; then
-	DEBIAN_FRONTEND=noninteractive 
-	apt-get install -y --force-yes \
-	pwgen debconf-utils privoxy nginx php5-common \
-	php5-fpm php5-cli php5-json php5-mysql php5-curl php5-intl \
-	php5-mcrypt php5-memcache php-xml-parser php-pear unbound owncloud \
-	node npm apache2-mpm-prefork- apache2-utils- apache2.2-bin- \
-	apache2.2-common- openjdk-7-jre-headless phpmyadmin php5 \
-	mysql-server-5.6 php5-gd php5-imap smarty3 git ntpdate macchanger \
-	bridge-utils hostapd isc-dhcp-server hostapd bridge-utils \
-	curl macchanger ntpdate tor bc sudo lsb-release dnsutils \
-	ca-certificates-java openssh-server ssh wireless-tools usbutils \
-	unzip debian-keyring subversion build-essential libncurses5-dev \
-	i2p yacy \
-	c-icap clamav  clamav-daemon  gcc make libcurl4-gnutls-dev \
-	libicapapi-dev u-boot-tools console-tools* squidguard \
-        gnupg openssl python-virtualenv python-pip python-lxml git \
-         zlib1g-dev python-dev webmin fail2ban libsystemd-dev \
-        postfix mailutils aptitude \
-	2>&1 > /var/apt-get-install.log
 fi
 	if [ $? -ne 0 ]; then
 		echo "Error: unable to install packages" | tee -a /var/libre_install.log
@@ -1069,86 +995,6 @@ install_certificates()
 
         # Cleanup
         # rm -rf certs
-}
-
-
-# ----------------------------------------------
-# Function to install nginx
-# ----------------------------------------------
-install_nginx()
-{
-        echo "Installing nginx ..." | tee -a /var/libre_install.log
-
-        if [ ! -e nginx-1.8.0 ]; then
-        echo "Downloading nginx ..." | tee -a /var/libre_install.log
-        cd $INSTALL_HOME
-        wget http://nginx.org/download/nginx-1.8.0.tar.gz
-                if [ $? -ne 0 ]; then
-                        echo "Error: unable to download nginx. Exiting ..." | tee -a /var/libre_install.log
-                        # exit 3
-                fi
-        tar -xzf nginx-1.8.0.tar.gz
-        fi
-
-        echo "Building nginx ..." | tee -a /var/libre_install.log
-        cd $INSTALL_HOME
-	
-	mkdir /etc/nginx/
-	mkdir /var/log/nginx
-	touch /var/run/nginx.lock
-	touch /var/run/nginx.pid
-	touch /var/log/nginx/error.log
-	touch /var/log/nginx/access.log
-	touch /etc/nginx/nginx.conf	
-
-        cd nginx-1.8.0/
-	./configure \
-	  --prefix=/etc/nginx \
-	  --pid-path=/var/run/nginx.pid \
-	  --conf-path=/etc/nginx/nginx.conf \
-	  --lock-path=/var/run/nginx.lock \
-	  --sbin-path=/usr/sbin/nginx \
-	  --error-log-path=/var/log/nginx/error.log \
-	  --http-log-path=/var/log/nginx/access.log \
-	  --with-http_gzip_static_module \
-	  --with-http_stub_status_module \
-	  --user=www-data \
-	  --group=www-data \
-	  --with-debug \
-	  --with-http_ssl_module \
-	  --add-module=/usr/src/modsecurity/nginx/modsecurity
-        make &&  make install
-
-        if [ $? -ne 0 ]; then
-                echo "Error: unable to install nginx. Exiting ..." | tee -a /var/libre_install.log
-                # exit 3
-        fi
-        cd ../
-
-        # Cleanup
-        rm -rf nginx-1.8.0.tar.gz 
-
-# systemd script for Nginx
-cat << EOF > /lib/systemd/system/nginx.service
-[Service]
-Type=forking
-ExecStartPre=/usr/local/nginx/sbin/nginx -t -c /usr/local/nginx/conf/nginx.conf
-ExecStart=/usr/local/nginx/sbin/nginx -c /usr/local/nginx/conf/nginx.conf
-ExecReload=/usr/local/nginx/sbin/nginx -s reload
-KillStop=/usr/local/nginx/sbin/nginx -s stop
-
-KillMode=process
-Restart=on-failure
-RestartSec=42s
-
-PrivateTmp=true
-LimitNOFILE=200000
-
-[Install]
-WantedBy=multi-user.target
-EOF
-
-systemctl daemon-reload
 }
 
 
@@ -2777,7 +2623,6 @@ if [ "$PROCESSOR" = "Intel" -o "$PROCESSOR" = "AMD" -o "$PROCESSOR" = "ARM" ]; t
 	install_modsecurity      # Install modsecurity package
 	install_waffle		 # Install modsecurity GUI WAF-FLE package
 	install_certificates	 # Install ssl certificates
-#	install_nginx		 # Install nginx package
 	install_mailpile	 # Install Mailpile package
 	install_easyrtc		 # Install EasyRTC package
 #	install_hublin		 # Install hublin package
