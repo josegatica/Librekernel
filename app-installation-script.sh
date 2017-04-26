@@ -2610,7 +2610,7 @@ if [ "$PROCESSOR" = "Intel" -o "$PROCESSOR" = "AMD" -o "$PROCESSOR" = "ARM" ]; t
         get_interfaces  	 # Get DHCP on eth0 or eth1 and 
 				 # connect to Internet
 	configure_repositories	 # Prepare and update repositories
-        set_cpu_throttle         # EXPERIMENTAL . Try to avoid fake warnings when CPU throttle under powersave
+#       set_cpu_throttle         # EXPERIMENTAL . Try to avoid fake warnings when CPU throttle under powersave
 #	install_apmode		 # Prepare wlan AP script
 	install_packages       	 # Download and install packages	
 #	install_libressl	 # Install Libressl package
