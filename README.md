@@ -473,3 +473,137 @@ Why we redirect gmail to mailpile or roundcube? obvious we offer s elfhosted sol
 	-   request_header_access From deny all
 	-   request_header_access Referer deny all
 	-   request_header_access User-Agent deny all
+
+
+
+
+Iptables are configured on /etc/rc.local script, and from here other scripts can be called to add/delete/modify
+activerules.First of all let's go ensure to clean all rules in all tables, for that we do:
+
+**
+iptables -X
+iptables -F
+iptables -t nat -F
+iptables -t filter -F
+**
+
+Next we do basic rules to allow some traffic to the local services. 
+Let's explain why we use a logical bridge interfacehere instead the physical interface.You can observe on this block of 
+rules we filter matching also interface, that is **br1**
+The use of logical bridge facilitates to use same know at priory 
+name for further interfaces, in a way we can call itbr1 and save fixed rules based on that name, and later we can add/remove 
+physical interfaces on this bridge, dependingparticual requirements of the enduser.On first stage when we are running 
+configuration-script.sh we don't know yet if the enduser will be use some ports or not, what ports are connected to internet 
+router and what ports are connected to the internal lan.More than that, eve we don't know if some of these ports are WIFI on 
+some wlanN interfaces, and we have no way toknow it at this stage.Then as default initial configuration the br1 interface is 
+builded with eth1 and wlan1 ( even those doesn't exist orare unconnected ) by the configuration script.Notice iptables rules 
+applied to ANY interface part of a bridge will cause the rule is valid for the whole bridge,in other words, if we place a rule 
+for eth1 , will affect to wlan1 too.Later, on wizard.sh script the user will be prompted to tell what physical interfaces ( he 
+doesn't know about thelogical ones !! ) he is going to connect and where, as well if required for WIFI id and credentials.On 
+this stage br1 may be modified , removing or adding interfaces.The second purpose to work on bridged model , at least on the 
+internal lan, is that is required to create some bridgeto use the AP services, where the Librerouter box will act as WIFI 
+
+Access Point for the internal lan.Now the next iptables rules are:
+**
+iptables -t nat -A PREROUTING -i br1 -p tcp -d 10.0.0.11 -j ACCEPT
+iptables -t nat -A PREROUTING -i br1 -p tcp -d 10.0.0.12 -j ACCEPT
+iptables -t nat -A PREROUTING -i br1 -p tcp -d 10.0.0.238 -j ACCEPT
+iptables -t nat -A PREROUTING -i br1 -p tcp -d 10.0.0.239 -j ACCEPT
+iptables -t nat -A PREROUTING -i br1 -p tcp -d 10.0.0.240 -j ACCEPT
+iptables -t nat -A PREROUTING -i br1 -p tcp -d 10.0.0.241 -j ACCEPT
+iptables -t nat -A PREROUTING -i br1 -p tcp -d 10.0.0.242 -j ACCEPT
+iptables -t nat -A PREROUTING -i br1 -p tcp -d 10.0.0.243 -j ACCEPT
+iptables -t nat -A PREROUTING -i br1 -p tcp -d 10.0.0.244 -j ACCEPT
+iptables -t nat -A PREROUTING -i br1 -p tcp -d 10.0.0.245 -j ACCEPT
+iptables -t nat -A PREROUTING -i br1 -p tcp -d 10.0.0.246 -j ACCEPT
+iptables -t nat -A PREROUTING -i br1 -p tcp -d 10.0.0.247 -j ACCEPT
+iptables -t nat -A PREROUTING -i br1 -p tcp -d 10.0.0.248 -j ACCEPT
+iptables -t nat -A PREROUTING -i br1 -p tcp -d 10.0.0.249 -j ACCEPT
+iptables -t nat -A PREROUTING -i br1 -p tcp -d 10.0.0.250 -j ACCEPT
+iptables -t nat -A PREROUTING -i br1 -p tcp -d 10.0.0.251 -j ACCEPT
+iptables -t nat -A PREROUTING -i br1 -p tcp -d 10.0.0.252 -j ACCEPT
+iptables -t nat -A PREROUTING -i br1 -p tcp -d 10.0.0.253 -j ACCEPT
+iptables -t nat -A PREROUTING -i br1 -p tcp -d 10.0.0.254 -j ACCEPT
+**
+
+This block only ensures the internal traffic is accepted, really nothing happens if we remove it while we havenot any further 
+rule dening that traffic.Is important to take in mind that iptables runs in the order we enter the rules and once one rule is 
+matchedthe next rules are NOT checked.Iptables use -A ( append = put at the end of other existing rules ), -I ( insert, you can 
+insert the rule at topor at some position ) and -D ( delete the rule )Next block:
+
+**
+iptables -t nat -A PREROUTING -i br1 -p tcp -d 10.0.0.1 --dport 22 -j REDIRECT --to-ports 22
+iptables -t nat -A PREROUTING -i br1 -p udp -d 10.0.0.1 --dport 53 -j REDIRECT --to-ports 53
+iptables -t nat -A PREROUTING -i br1 -p tcp -d 10.0.0.1 --dport 80 -j REDIRECT --to-ports 80
+iptables -t nat -A PREROUTING -i br1 -p tcp -d 10.0.0.1 --dport 443 -j REDIRECT --to-ports 443
+**
+
+Even the syntax used here is a bit different, really does same, accept the traffic to some ports on theIP 10.0.0.1, redirecting 
+to the same port, that is matching that traffic and ignoring next rules in orderin the tables.Now comes a block per each 
+service:
+
+**### to squid-i2p ###
+iptables -t nat -A OUTPUT     -d 10.191.0.1 -p tcp --dport 80 -j REDIRECT --to-port 3128
+iptables -t nat -A PREROUTING -d 10.191.0.1 -p tcp --dport 80 -j REDIRECT --to-port 3128
+iptables -t nat -A PREROUTING -i br1 -p tcp -m tcp --sport 80 -d 10.191.0.1 -j REDIRECT --to-ports 3128
+**
+
+First line matches all outgoing traffic with destination IP 10.191.0.1 and destination port 80 and redirect itto the port 3128
+Second line does same but with all originated traffic in the box ( or injected traffic as ip_forwarding=1 )Third line does same 
+but for inverse traffic on the bridge 1 incoming traffic from port 80 and destination 10.191.0.1The result is all outgoing 
+traffic on any interface to 10.191.0.1:80, al traffic passing through the Librerouter withdestination 10.191.0.1:80 and all 
+traffic in bridge1 with destination 10.191.0.1 and source port 80 , all them goesredirected to port 3128
+
+**#### ssh to tor socks proxy ###
+iptables -t nat -A PREROUTING -i br1 -p tcp -d 10.0.0.0/8 --dport 22 -j REDIRECT --to-ports 9051
+**
+The traffic on the bridge to destination internal lan and destination port 22 ( SSH ) is redirected to theTor Socks5 service. 
+Well Tor is not a Proxy like a HTTP Proxy, but is a SOCKS, so don't come confuse withthe comment "ssh to tor socks proxy"
+
+This causes all traffic from the internal lan ( same host or different host ) and destination port 22 is redirectedto the Tor 
+service.
+
+### to squid-tor
+** iptables -t nat -A PREROUTING -i br1 -p tcp -d 10.0.0.0/8 -j DNAT --to 10.0.0.1:3129
+### to squid http 
+###
+** 
+iptables -t nat -A PREROUTING -i br1 -p tcp -m ndpi --http -j REDIRECT --to-ports 3130
+iptables -t nat -A PREROUTING -i br1 -p tcp --dport 80 -j DNAT --to 10.0.0.1:3130
+### to squid https ### 
+** 
+iptables -t nat -A PREROUTING -i br1 -p tcp --dport 443 -j REDIRECT --to-ports 3131
+**
+These does similar to anterior, but redirecting to SQUID ports 3129, 3130 and 3131  
+
+**### iptables nat###
+iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+**
+Here is new rule called MASQUERADE that is focused to NAT the traffic in a way a packet ( remember we have ip_forward=1 
+)comming into br1 with origination ip Host1 would reach the outside world as from Host1. Then of course the other endwill not 
+know where to respond to that packet. We need to do MASQUERADE as this packed that doesn't matched any earlyrule goes to the 
+eth0 ( our internet connection as default ) and go to the external world as from our public IP connection( our internet 
+connection ). When response packect comes back the router will do translate it again to the Librerouter IPon eth0
+
+**### Blocking ICMP from LAN_TO_WAN and from WAN_TO_LAN/ROUTER ###
+iptables -A FORWARD -p ICMP -j DROP
+iptables -A INPUT -p icmp -s 10.0.0.0/8 ! -d 10.0.0.0/8 -j DROP**  
+
+The first line just drop forwarding ICMP ( ping ) traffic from one interface to other different interface or IP.The second line drops all ICMP traffic comming not from the internal lan and with destination internal lan, so internal lancan be only pinged from the internal lan.This allows pinging to wan , that is pinging to the external world, but cuts discovering from any host that is not in theinternal lan via ping.
+
+**### Blocking IPsec (All Directions) 
+###
+**
+iptables -A INPUT -m ndpi --ip_ipsec -j DROP
+iptables -A OUTPUT -m ndpi --ip_ipsec -j DROP
+iptables -A FORWARD -m ndpi --ip_ipsec -j DROP
+**
+We block all IPSEC traffic in all directions, all this traffic is dropped  
+
+**### Blocking DNS request from client to any servers other than librerouter ###
+iptables -A INPUT -i br1 -m ndpi --dns ! -d 10.0.0.1 -j DROP
+iptables -A FORWARD -m ndpi --dns ! -d 10.0.0.1 -j DROP**
+
+We don't allow any traffic for DNS services with destination different of 10.0.0.1, in a way all domains must be resolvedin the Librerouter box and NEVER directly by external DNS servers.Finally .... we just drop all other forwarded traffic that didn't matched the previous rules with :
+
+**iptables -P FORWARD DROP**
