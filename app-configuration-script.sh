@@ -1090,7 +1090,7 @@ VirtualAddrNetworkIPv4 10.0.0.0/8
 AutomapHostsOnResolve 1
 " >>  /etc/tor/torrc
 
-service apache stop 
+service apache2 stop 
 sleep 10
 service tor restart | tee -a /var/libre_config.log
 
@@ -4016,8 +4016,8 @@ $DEBUG_FILE = "/var/log/mlog2waffle/mlog2waffle.debug";
 EOF
 
 # Preparing mlog2waffle executables
-cp /usr/local/waffle/extra/mlog2waffle/mlog2waffle /usr/sbin/mlog2waffl
-cp /usr/local/waffle/extra/mlog2waffle/mlog2waffle.ubuntu /etc/init.d/mlog2waffle
+cp /usr/local/waf-fle/extra/mlog2waffle/mlog2waffle /usr/sbin/mlog2waffl
+cp /usr/local/waf-fle/extra/mlog2waffle/mlog2waffle.ubuntu /etc/init.d/mlog2waffle
 
 # Start mlog2waffle
 update-rc.d mlog2waffle defaults 99
@@ -5020,11 +5020,11 @@ logger "Check Services: privoxy-tor is not running. Restarting ..."
 fi
 
 # Checking apache
-if /etc/init.d/apache status | grep "active (running)"; then
+if /etc/init.d/apache2 status | grep "active (running)"; then
 logger "Check Services: Apache is ok"
 else
 logger "Check Services: Apache is not running. Restarting ..."
-/etc/init.d/apache restart
+/etc/init.d/apache2 restart
 fi
 EOF
 
