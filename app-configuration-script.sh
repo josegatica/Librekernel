@@ -1090,7 +1090,7 @@ VirtualAddrNetworkIPv4 10.0.0.0/8
 AutomapHostsOnResolve 1
 " >>  /etc/tor/torrc
 
-service nginx stop 
+service apache stop 
 sleep 10
 service tor restart | tee -a /var/libre_config.log
 
@@ -2210,8 +2210,8 @@ app.use(serveStatic('static', {'index': ['index.html']}));
 // Start Express http server on port 8443
 var webServer = https.createServer(
 {
-key:  fs.readFileSync("/etc/ssl/nginx/conference/conference_librerouter_net.key"),
-cert: fs.readFileSync("/etc/ssl/nginx/conference/conference_bundle.crt")
+key:  fs.readFileSync("/etc/ssl/apache/conference/conference_librerouter_net.key"),
+cert: fs.readFileSync("/etc/ssl/apache/conference/conference_bundle.crt")
 },
 app).listen(8443);
 
@@ -3675,7 +3675,7 @@ production:
 	RAILS_ENV=production bundle exec rake db:migrate
 	RAILS_ENV=production REDMINE_LANG=en bundle exec rake redmine:load_default_data
 
-        # Link the redmine public dir to the nginx-redmine root:
+        # Link the redmine public dir to the apache-redmine root:
         ln -s /opt/redmine/redmine-3.3.1/public/ /var/www/redmine
 
         # Set permission for Gemfile
@@ -3853,27 +3853,9 @@ sudo sed -i "s/SecAuditLogType.*/SecAuditLogType Concurrent/" /etc/modsecurity/m
 sudo sed -i "s/SecAuditLog.*/SecAuditLog /var/log/mlog2waffle/modsec_audit.log/" /etc/modsecurity/modsecurity.conf
 sudo sed -i "s/SecAuditLogStorageDir.*/SecAuditLogStorageDir /var/log/mlog2waffle/data/" /etc/modsecurity/modsecurity.conf
 
-#cp /usr/src/modsecurity/modsecurity.conf-recommended /etc/nginx/modsecurity.conf
-#cp /usr/src/modsecurity/unicode.mapping /etc/nginx/
-
 # Creating new directory for the ModSecurity audit log
 mkdir -p /opt/modsecurity/var/audit/
 chown -R www-data:www-data /opt/modsecurity/var/audit/
-
-# Creating modsecurity configuration
-#cat << EOF >> /etc/nginx/modsecurity.conf
-#DefaultAction
-#SecDefaultAction "log,deny,phase:1"
-#
-#If you want to load single rule /usr/loca/nginx/conf
-#Include base_rules/modsecurity_crs_41_sql_injection_attacks.conf
-#
-#Load all Rule
-#Include base_rules/*.conf
-#
-#Disable rule by ID from error message (for my wordpress)
-#SecRuleRemoveById 981172 981173 960032 960034 960017 960010 950117 981004 960015
-#EOF
 
 # modsecurity apaches module configuration
 mv /usr/src/owasp-modsecurity-crs/rules/RESPONSE-950-DATA-LEAKAGES.conf /usr/src/owasp-modsecurity-crs/rules/RESPONSE-950-DATA-LEAKAGES
@@ -3921,7 +3903,7 @@ configure_waffle()
       fi    
 
       # Inserting waffle database
-      mysql -u "$MYSQL_USER" -p"$MYSQL_PASS" waffle < /usr/local/waf-fle/waf-fle-master/extra/waffle.mysql
+      mysql -u "$MYSQL_USER" -p"$MYSQL_PASS" waffle < /usr/local/waf-fle/extra/waffle.mysql
       if [ $? -ne 0 ]; then
             echo "Error: Unable to insert waf-fle database. Exiting" | tee -a /var/libre_config.log
             exit 3
@@ -3929,7 +3911,7 @@ configure_waffle()
    fi 
    
 # WAF-FLE Configuration File
-cat << EOF > /usr/local/waf-fle/waf-fle-master/config.php
+cat << EOF > /usr/local/waf-fle/config.php
 <?PHP
 \$DB_HOST  = "localhost";
 \$DB_USER  = "root";
@@ -4687,8 +4669,8 @@ cat << EOF > /etc/apache2/sites-enabled/mailpile.conf
     ErrorLog \${APACHE_LOG_DIR}/email_error.log
     CustomLog \${APACHE_LOG_DIR}/email_access.log combined
     SSLEngine on
-    SSLCertificateFile    /etc/ssl/nginx/apache/email_bundle.crt
-    SSLCertificateKeyFile /etc/ssl/nginx/apache/email_librerouter_net.key
+    SSLCertificateFile    /etc/ssl/apache/email_bundle.crt
+    SSLCertificateKeyFile /etc/ssl/apache/email_librerouter_net.key
     ProxyPreserveHost On
     ProxyPass / http://127.0.0.1:33411/
     ProxyPassReverse / http://127.0.0.1:33411/
@@ -5037,12 +5019,12 @@ logger "Check Services: privoxy-tor is not running. Restarting ..."
 /etc/init.d/privoxy-tor restart
 fi
 
-# Checking nginx
-if /etc/init.d/nginx status | grep "active (running)"; then
-logger "Check Services: Nginx is ok"
+# Checking apache
+if /etc/init.d/apache status | grep "active (running)"; then
+logger "Check Services: Apache is ok"
 else
-logger "Check Services: Nginx is not running. Restarting ..."
-/etc/init.d/nginx restart
+logger "Check Services: Apache is not running. Restarting ..."
+/etc/init.d/apache restart
 fi
 EOF
 
@@ -5282,8 +5264,8 @@ if [ "$ARCH" == "x86_64" ]; then
 	echo "Configuring Gitlab ..." | tee -a /var/libre_config.log
 
 	# Creating certificate bundle
-	rm -rf /etc/ssl/nginx/gitlab/gitlab_bundle.crt
-	cat /etc/ssl/nginx/gitlab/gitlab_librerouter_net.crt /etc/ssl/nginx/gitlab/gitlab_librerouter_net.ca-bundle >> /etc/ssl/nginx/gitlab/gitlab_bundle.crt
+	rm -rf /etc/ssl/apache/gitlab/gitlab_bundle.crt
+	cat /etc/ssl/apache/gitlab/gitlab_librerouter_net.crt /etc/ssl/apache/gitlab/gitlab_librerouter_net.ca-bundle >> /etc/ssl/apache/gitlab/gitlab_bundle.crt
 
 	# Changing configuration in gitlab.rb
 	sed -i -e '/^[^#]/d' /etc/gitlab/gitlab.rb
@@ -5294,8 +5276,8 @@ gitlab_workhorse['auth_backend'] = \"http://localhost:8081\"
 unicorn['port'] = 8081
 nginx['redirect_http_to_https'] = true
 nginx['listen_addresses'] = ['10.0.0.247']
-nginx['ssl_certificate'] = \"/etc/ssl/nginx/gitlab/gitlab_bundle.crt\"
-nginx['ssl_certificate_key'] = \"/etc/ssl/nginx/gitlab/gitlab_librerouter_net.key\"
+nginx['ssl_certificate'] = \"/etc/ssl/apache/gitlab/gitlab_bundle.crt\"
+nginx['ssl_certificate_key'] = \"/etc/ssl/apache/gitlab/gitlab_librerouter_net.key\"
 " >> /etc/gitlab/gitlab.rb
 
 	# Reconfiguring gitlab 
@@ -6458,7 +6440,6 @@ create_commands()
 {
 echo "Creating configs and logs commands" | tee -a /var/libre_config.log
 cat << EOF > /var/box_configs
-nginx            /etc/nginx/nginx.conf
 apache2          /etc/apache2/apache2.conf
 prosody          /etc/prosody/prosody.cfg.lua
 roundcube        /etc/roundcube/config.inc.php
@@ -6504,8 +6485,6 @@ chmod +x /usr/sbin/configs
 
 
 cat << EOF > /var/box_logs
-nginx            /var/log/nginx/access.log
-		 /var/log/nginx/error.log
 apache2          /var/log/apache2/access.log
 		 /var/log/apache2/error.log
 prosody          /var/log/prosody/prosody.log
@@ -6536,11 +6515,11 @@ privoxy 	 /var/log/privoxy/logfile
 yacy		 /var/log/yacy/queries.log
 		 /var/log/yacy/yacy00.log
 tor		 /var/log/tor/log
-friendica	 /var/log/nginx/friendica.log
-owncloud         /var/log/nginx/owncloud.log
-mailpile         /var/log/nginx/mailpile.log
-redmine          /var/log/nginx/redmine.log
-trac             /var/log/nginx/trac.log
+friendica	 /var/log/apache/friendica.log
+owncloud         /var/log/apache/owncloud.log
+mailpile         /var/log/apache/mailpile.log
+redmine          /var/log/apache/redmine.log
+trac             /var/log/apache/trac.log
 EOF
 
 # Create logs command
@@ -6629,7 +6608,6 @@ configure_owncloud		# Configuring Owncloud local service
 configure_mailpile		# Configuring Mailpile local service
 configure_modsecurity		# Configuring modsecurity 
 configure_waffle		# Configuring modsecurity GUI WAF-FLE
-#configure_nginx                 # Configuring Nginx web server
 configure_privoxy		# Configuring Privoxy proxy server
 configure_tinyproxy             # Configuring Tinyproxy proxy server
 configure_squid			# Configuring squid proxy server
