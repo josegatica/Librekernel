@@ -515,6 +515,7 @@ if [ $PLATFORM = "D8" ]; then
         libmysqlclient-dev wkhtmltopdf libpcre3 mysql-server \
 	mysql-client-5.5 iw rfkill \
         libfile-tail-perl libfile-pid-perl libwww-perl \
+        dialog wpasupplicant \
         2>&1 > /var/apt-get-install_1.log
 
 	# services
@@ -2493,18 +2494,8 @@ mkdir /root/.tahoe
 
 
 # -----------------------------------------------
-# This function saves variables in file, so
-# parametization script can read and use these 
-# values
-# Variables to save are:
-#   PLATFORM
-#   HARDWARE
-#   PROCESSOR
-#   EXT_INTERFACE
-#   INT_INTERFACE
-#   ARCH
-# -----------------------------------------------  
-
+# Function to install atheros formware 
+# -----------------------------------------------
 install_atheros_firmware()
 {
     apt-get install cmake -y --force-yes >> /var/libre_install.log
@@ -2517,15 +2508,6 @@ install_atheros_firmware()
     cp target_firmware/*.fw /lib/firmware/
 }
 
-install_dialog()
-{
-    apt-get install dialog -y --force-yes >> /var/libre_install.log
-}
-
-install_wpa()
-{
-    apt-get install wpasupplicant -y --force-yes >> /var/libre_install.log
-}
 
 set_cpu_throttle() {
 
@@ -2533,6 +2515,19 @@ set_cpu_throttle() {
     cpupower frequency-set -g performance
 }
 
+
+# -----------------------------------------------
+# This function saves variables in file, so
+# parametization script can read and use these 
+# values
+# Variables to save are:
+#   PLATFORM
+#   HARDWARE
+#   PROCESSOR
+#   EXT_INTERFACE
+#   INT_INTERFACE
+#   ARCH
+# -----------------------------------------------  
 save_variables()
 {
         echo "Saving variables ..." | tee -a /var/libre_install.log
@@ -2654,10 +2649,8 @@ if [ "$PROCESSOR" = "Intel" -o "$PROCESSOR" = "AMD" -o "$PROCESSOR" = "ARM" ]; t
 	install_upnp	 	 # Install miniupnp package
         install_webconsole       # Install webconsole package
 	install_tahoe            # Install tahoe
-        save_variables	         # Save detected variables
         install_atheros_firmware # Install free firmware for atheros devices from Github
-        install_dialog           # This is the dialog, used for wizard.sh user menus
-        install_wpa              # Install wpasupplicant required to connect to AP
+        save_variables	         # Save detected variables
 
         echo "Installation completed." | tee -a /var/libre_install.log
 fi
