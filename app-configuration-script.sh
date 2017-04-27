@@ -408,7 +408,7 @@ if [ "$PROCESSOR" = "Intel" -o "$PROCESSOR" = "AMD" -o "$PROCESSOR" = "ARM" ]; t
 	auto $INT_INTERFACE
 	#allow-hotplug $INT_INTERFACE
 	iface $INT_INTERFACE inet static
-	bridge_ports eth1 wlan1
+	bridge_ports $INT_INTERFACE wlan1
 	    address 10.0.0.1
 	    netmask 255.255.255.0
             network 10.0.0.0
@@ -5274,10 +5274,7 @@ if [ "$ARCH" == "x86_64" ]; then
 external_url 'https://gitlab.librerouter.net'
 gitlab_workhorse['auth_backend'] = \"http://localhost:8081\"
 unicorn['port'] = 8081
-nginx['redirect_http_to_https'] = true
-nginx['listen_addresses'] = ['10.0.0.247']
-nginx['ssl_certificate'] = \"/etc/ssl/apache/gitlab/gitlab_bundle.crt\"
-nginx['ssl_certificate_key'] = \"/etc/ssl/apache/gitlab/gitlab_librerouter_net.key\"
+nginx['enable'] = false
 " >> /etc/gitlab/gitlab.rb
 
 	# Reconfiguring gitlab 
@@ -6600,7 +6597,7 @@ configure_ssh			# Configuring ssh server
 configure_tor			# Configuring TOR server
 configure_i2p			# Configuring i2p services
 configure_unbound		# Configuring Unbound DNS server
-configure_dnscrypt		# Configuring DNSCrypt server
+#configure_dnscrypt		# Configuring DNSCrypt server
 configure_yacy			# Configuring yacy search engine
 configure_friendica		# Configuring Friendica local service
 configure_easyrtc		# Configuring EasyRTC local service
@@ -6645,8 +6642,8 @@ configure_gitlab 		# Configure gitlab servies (only for amd64)
 #configure_snorby		# Configure Snorby
 configure_upnp                  # configure miniupnp
 configure_webconsole            # configure webconsole service
-configure_tahoe			# Configure tahoe
-configure_tahoe2                # Configure tahoe 2
+#configure_tahoe			# Configure tahoe
+#configure_tahoe2                # Configure tahoe 2
 #services_to_tor                # Redirect yacy and prosody traffic to tor
 configure_warnings		# Configure router warnings
 configure_arp			# Function to configure defense against ARP Spoofing
