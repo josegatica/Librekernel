@@ -870,35 +870,15 @@ install_libressl()
 # ----------------------------------------------
 install_modsecurity()
 {
-        echo "Installing modsecurity ..." | tee -a /var/libre_install.log
-
-        if [ ! -e /usr/src/modsecurity ]; then
-        echo "Downloading modsecurity ..." | tee -a /var/libre_install.log
-        cd /usr/src/
-        git clone https://github.com/SpiderLabs/ModSecurity.git modsecurity
-                if [ $? -ne 0 ]; then
-                        echo "Error: unable to download modsecurity. Exiting ..." | tee -a /var/libre_install.log
-                        exit 3
-                fi
-        fi
-
-        echo "Building modsecurity ..." | tee -a /var/libre_install.log
-        cd /usr/src/modsecurity
-
-        ./autogen.sh
-        ./configure --enable-standalone-module --disable-mlogc
-        make
-
-        if [ $? -ne 0 ]; then
-                echo "Error: unable to install modsecurity. Exiting ..." | tee -a /var/libre_install.log
-                exit 3
-        fi
+        echo "Installing modsecurity OWASP Core Rule Set..." | tee -a /var/libre_install.log
 
         # Downloading the OWASP Core Rule Set
         cd /usr/src/
         git clone https://github.com/SpiderLabs/owasp-modsecurity-crs.git
-        cd owasp-modsecurity-crs
-        cp -R base_rules/ /etc/nginx/
+        if [ $? -ne 0 ]; then
+                echo "Error: unable to download modsecurity rules. Exiting ..." | tee -a /var/libre_install.log
+                exit 3
+        fi
 
         cd $INSTALL_HOME
 }
@@ -1967,19 +1947,22 @@ install_evebox()
         if [ ! -e evebox-0.6.0dev-linux-amd64 ]; then
         	echo "Downloading EveBox ..." | tee -a /var/libre_install.log
         	wget --no-check-certificat \
-        	https://dl.bintray.com/jasonish/evebox-development/evebox-latest-linux-x64.zip
+        	https://dl.bintray.com/jasonish/deb-evebox-latest/evebox_0.7.0_amd64.deb
                 	if [ $? -ne 0 ]; then
                         	echo "Error: unable to download EveBox. Exiting ..." | tee -a /var/libre_install.log
                         	exit 3
                 	fi
-        	unzip evebox-latest-linux-x64.zip
         fi
 
-        # Moving bin
-        sudo mv evebox-latest-linux-x64/evebox /sbin/
+        # Installing package  
+        dpkg -i evebox_0.7.0_amd64.deb
+                if [ $? -ne 0 ]; then
+                        echo "Error: unable to install EveBox. Exiting ..." | tee -a /var/libre_install.log
+                        exit 3
+                fi
 
         # Cleanup
-        rm -rf evebox-latest-linux-x64.zip
+        rm -rf evebox_0.7.0_amd64.deb
 }
 
 
@@ -2635,7 +2618,7 @@ if [ "$PROCESSOR" = "Intel" -o "$PROCESSOR" = "AMD" -o "$PROCESSOR" = "ARM" ]; t
 #	install_flowviewer	 # Install FlowViewer package
 #	install_pmgraph		 # Install pmgraph package
 #	install_nfsen		 # Install nfsen package
-	install_evebox		 # Install EveBox package
+#	install_evebox		 # Install EveBox package
 #	install_selks		 # Install SELKS GUI
 #	install_snorby		 # Install Snorby package
 	install_glype		 # Install glype proxy
