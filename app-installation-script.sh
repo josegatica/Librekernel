@@ -28,7 +28,7 @@ export DEBIAN_FRONTEND=noninteractive
 #  * Debian GNU/Linux 8  
 #  * Trisquel 7
 # ----------------------------------------------
-get_platform () 
+get_platform() 
 {
         echo "Detecting platform ..." | tee /var/libre_install.log
 	FILE=/etc/issue
@@ -53,7 +53,7 @@ get_platform ()
 # ----------------------------------------------
 # check_internet
 # ----------------------------------------------
-check_internet () 
+check_internet() 
 {
 	# Removing firewall
 	iptables -F
@@ -91,7 +91,7 @@ check_internet ()
 # ----------------------------------------------
 # check_root
 # ----------------------------------------------
-check_root ()
+check_root()
 {
 	echo "Checking user root ..." | tee -a /var/libre_install.log
 	if [ "$(whoami)" != "root" ]; then
@@ -104,7 +104,7 @@ check_root ()
 # ----------------------------------------------
 # configure_repositories
 # ----------------------------------------------
-configure_repositories () 
+configure_repositories() 
 {
 	# Configuring main repositories before any installation
         cat << EOF >  /etc/apt/sources.list
@@ -158,137 +158,8 @@ Acquire::https::dl.dropboxusercontent.com::Verify-Peer \"false\";
 Acquire::https::deb.nodesource.com::Verify-Peer \"false\";
         " > /etc/apt/apt.conf.d/apt.conf 
 
-# Preparing repositories for Ubuntu 12.04 GNU/Linux 
 
-	if [ $PLATFORM = "U12" ]; then
-		# Configuring repositories for Ubuntu 12.04
-		echo "Updating repositories in Ubuntu 12.04"
-#        	echo "deb http://security.ubuntu.com/ubuntu precise-security main" >> /etc/apt/sources.list
- 		echo "Installing apt-transport-https ..."
-		apt-get install -y --force-yes apt-transport-https 2>&1 > /var/apt-get-install-aptth.log
-		if [ $? -ne 0 ]; then
-			echo "Error: Unable to install apt-transport-https"
-			exit 3
-		fi
-		
-		# Prepare owncloud repo
-		echo 'deb http://download.opensuse.org/repositories/isv:/ownCloud:/community/Debian_7.0/ /' > /etc/apt/sources.list.d/owncloud.list
-		wget http://download.opensuse.org/repositories/isv:/ownCloud:/community/Debian_7.0/Release.key -O- | apt-key add -
-		
-		# Prepare Sogo repo
-                apt-key adv --keyserver keys.gnupg.net --recv-key 0x810273C4
-                echo 'deb http://packages.inverse.ca/SOGo/nightly/3/ubuntu/ precise precise' > /etc/apt/sources.list.d/sogo.list
-
-		# Preparing yacy repo
-		echo 'deb http://debian.yacy.net ./' > /etc/apt/sources.list.d/yacy.list
-		apt-key advanced --keyserver pgp.net.nz --recv-keys 03D886E7
-		
-		# preparing i2p repo 
-        	echo 'deb https://deb.i2p2.de/ precise main' >/etc/apt/sources.list.d/i2p.list
-        	echo 'deb-src https://deb.i2p2.de/ precise main' >>/etc/apt/sources.list.d/i2p.list
-
-		# preparing tor repo 
-		# preparing webmin repo 
-       		echo 'deb http://download.webmin.com/download/repository sarge contrib' > /etc/apt/sources.list.d/webmin.list
-        	echo 'deb http://webmin.mirror.somersettechsolutions.co.uk/repository sarge contrib' >> /etc/apt/sources.list.d/webmin.list
-        	wget  "http://www.webmin.com/jcameron-key.asc" -O- | apt-key add -
-
-# Preparing repositories for Ubuntu 14.04 GNU/Linux 
-
-	elif [ $PLATFORM = "U14" ]; then
-		# Configuring repositories for Ubuntu 14.04
-		echo "Updating repositories in Ubuntu 14.04"
-#        	echo "deb http://security.ubuntu.com/ubuntu trusty-security main" >> /etc/apt/sources.list
-        	#apt-get update 2>&1 > /var/apt-get-update-default.log
- 		echo "Installing apt-transport-https ..."
-		apt-get install -y --force-yes apt-transport-https 2>&1 > /var/apt-get-install-aptth.log
-		if [ $? -ne 0 ]; then
-			echo "Error: Unable to install apt-transport-https"
-			exit 3
-		fi
-		
-		# Prepare owncloud repo
-		echo 'deb http://download.opensuse.org/repositories/isv:/ownCloud:/community/Debian_7.0/ /' > /etc/apt/sources.list.d/owncloud.list
-		wget http://download.opensuse.org/repositories/isv:/ownCloud:/community/Debian_7.0/Release.key -O- | apt-key add -
-
-		# Prepare Sogo repo
-                apt-key adv --keyserver keys.gnupg.net --recv-key 0x810273C4
-                echo 'deb http://packages.inverse.ca/SOGo/nightly/3/ubuntu/ trusty trusty' > /etc/apt/sources.list.d/sogo.list
-		
-		# Preparing yacy repo
-		echo 'deb http://debian.yacy.net ./' > /etc/apt/sources.list.d/yacy.list
-		apt-key advanced --keyserver pgp.net.nz --recv-keys 03D886E7
-		
-		# preparing i2p repo 
-        	#echo 'deb https://deb.i2p2.de/ trusty main' >/etc/apt/sources.list.d/i2p.list
-        	#echo 'deb-src https://deb.i2p2.de/ trusty main' >>/etc/apt/sources.list.d/i2p.list
-                echo -ne '\n' | apt-add-repository ppa:i2p-maintainers/i2p
-
-		# preparing tor repo 
-		# preparing webmin repo 
-       		echo 'deb http://download.webmin.com/download/repository sarge contrib' > /etc/apt/sources.list.d/webmin.list
-        	echo 'deb http://webmin.mirror.somersettechsolutions.co.uk/repository sarge contrib' >> /etc/apt/sources.list.d/webmin.list
-        	wget "http://www.webmin.com/jcameron-key.asc" -O- | apt-key add -
-
-# Preparing repositories for Debian 7 GNU/Linux 
-
-	elif [ $PLATFORM = "D7" ]; then
-		# Configuring repositories for Debian 7
-		echo "deb http://ftp.us.debian.org/debian wheezy main non-free contrib" > /etc/apt/sources.list
-		echo "deb http://ftp.debian.org/debian/ wheezy-updates main contrib non-free" >> /etc/apt/sources.list
-		echo "deb http://security.debian.org/ wheezy/updates main contrib non-free" >> /etc/apt/sources.list
-
-		# There is a need to install apt-transport-https 
-		# package before preparing third party repositories
-		echo "Updating repositories ..."
-	        apt-get update 2>&1 > /var/apt-get-update-default.log
- 		echo "Installing apt-transport-https ..."
-		apt-get install -y --force-yes apt-transport-https 2>&1 > /var/apt-get-install-aptth.log
-		if [ $? -ne 0 ]; then
-			echo "Error: Unable to install apt-transport-https"
-			exit 3
-		fi
-	
-		# Prepare owncloud repo
-		echo 'deb http://download.opensuse.org/repositories/isv:/ownCloud:/community/Debian_7.0/ /' > /etc/apt/sources.list.d/owncloud.list
-		wget http://download.opensuse.org/repositories/isv:/ownCloud:/community/Debian_7.0/Release.key -O- | apt-key add -
-		
-		# Prepare Sogo repo
-                apt-key adv --keyserver keys.gnupg.net --recv-key 0x810273C4
-                echo 'deb http://packages.inverse.ca/SOGo/nightly/3/debian/ wheezy wheezy' > /etc/apt/sources.list.d/sogo.list
-		
-		# Prepare prosody repo
-		# echo 'deb http://packages.prosody.im/debian wheezy main' > /etc/apt/sources.list.d/prosody.list
-		# wget https://prosody.im/files/prosody-debian-packages.key -O- | apt-key add -
- 
-		# Prepare tahoe repo
-		# echo 'deb https://dl.dropboxusercontent.com/u/18621288/debian wheezy main' > /etc/apt/sources.list.d/tahoei2p.list
-		# apt-key advanced --keyserver pgp.net.nz --recv-keys 8CF6E896B3C01B09
-		# W: GPG error: https://dl.dropboxusercontent.com wheezy Release: The following signatures were invalid: KEYEXPIRED 1460252357
-				
-		# Prepare yacy repo
-		echo 'deb http://debian.yacy.net ./' > /etc/apt/sources.list.d/yacy.list
-		apt-key advanced --keyserver pgp.net.nz --recv-keys 03D886E7
-
-		# Prepare i2p repo
-		echo 'deb https://deb.i2p2.de/ wheezy main' > /etc/apt/sources.list.d/i2p.list
-		wget --no-check-certificate https://geti2p.net/_static/i2p-debian-repo.key.asc -O- | apt-key add -
-
-		# Prepare tor repo
-		echo 'deb http://deb.torproject.org/torproject.org wheezy main'  > /etc/apt/sources.list.d/tor.list
-		apt-key advanced --keyserver pgp.net.nz --recv-keys 74A941BA219EC810
-
-		# Prepare Webmin repo
-		echo 'deb http://download.webmin.com/download/repository sarge contrib' > /etc/apt/sources.list.d/webmin.list
-		if [ -e jcameron-key.asc ]; then
-			rm -r jcameron-key.asc
-		fi
-		wget http://www.webmin.com/jcameron-key.asc
-		apt-key add jcameron-key.asc 
-
-# Preparing repositories for Debian 8 GNU/Linux 
-
-	elif [ $PLATFORM = "D8" ]; then
+	if [ $PLATFORM = "D8" ]; then
 		# Avoid macchanger asking for information
 		export DEBIAN_FRONTEND=noninteractive
 
@@ -382,66 +253,6 @@ EOF
 
 # Preparing repositories for Trisquel GNU/Linux 7.0
 
-	elif [ $PLATFORM = "T7" ]; then
-		# Avoid macchanger asking for information
-		export DEBIAN_FRONTEND=noninteractive
-		
-		# Configuring repositories for Trisquel 7
-		echo "deb http://fr.archive.trisquel.info/trisquel/ belenos main" > /etc/apt/sources.list
-		echo "deb-src http://fr.archive.trisquel.info/trisquel/ belenos main" >> /etc/apt/sources.list
-		echo "deb http://fr.archive.trisquel.info/trisquel/ belenos-security main" >> /etc/apt/sources.list
-		echo "deb-src http://fr.archive.trisquel.info/trisquel/ belenos-security main" >> /etc/apt/sources.list
-		echo "deb http://fr.archive.trisquel.info/trisquel/ belenos-updates main" >> /etc/apt/sources.list
-		echo "deb-src http://fr.archive.trisquel.info/trisquel/ belenos-updates main" >> /etc/apt/sources.list
-
-		# There is a need to install apt-transport-https 
-		# package before preparing third party repositories
-		echo "Updating repositories ..."
-   		apt-get update 2>&1 > /var/apt-get-update-default.log
-
-		if [ $? -ne 0 ]; then
-			echo "ERROR: UNABLE TO UPDATE REPOSITORIES"
-			exit 10
-		else
-			echo "Updating done successfully"
-		fi
-	
- 		echo "Installing apt-transport-https ..."
-		apt-get install -y --force-yes apt-transport-https 2>&1 > /var/apt-get-install-aptth.log
-
-		if [ $? -ne 0 ]; then
-			echo "ERROR: UNABLE TO INSTALL PACKAGES: apt-transport-https"
-			exit 11
-		else 
-			echo "Installation done successfully"
-		fi
-
-		echo "Preparing third party repositories ..."
-		
-		# Prepare yacy repo
-		echo 'deb http://debian.yacy.net ./' > /etc/apt/sources.list.d/yacy.list
-		apt-key advanced --keyserver pgp.net.nz --recv-keys 03D886E7
-
-		# Prepare i2p repo
-		echo 'deb https://deb.i2p2.de/ stable main' > /etc/apt/sources.list.d/i2p.list
-		wget --no-check-certificate https://geti2p.net/_static/i2p-debian-repo.key.asc -O- | apt-key add -
-	
-		# Prepare tahoe repo
-		# echo 'deb https://dl.dropboxusercontent.com/u/18621288/debian wheezy main' > /etc/apt/sources.list.d/tahoei2p.list
-		
-		# Prepare tor repo
-		echo 'deb http://deb.torproject.org/torproject.org wheezy main'  > /etc/apt/sources.list.d/tor.list
-		gpg --keyserver pgp.net.nz --recv 886DDD89
-		gpg --export A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89 | apt-key add -
-
-		# Prepare Webmin repo
-		echo 'deb http://download.webmin.com/download/repository sarge contrib' > /etc/apt/sources.list.d/webmin.list
-		if [ -e jcameron-key.asc ]; then
-			rm -r jcameron-key.asc
-		fi
-		wget http://www.webmin.com/jcameron-key.asc
-		apt-key add jcameron-key.asc 
-
 	else 
 		echo "ERROR: UNKNOWN PLATFORM" 
 		exit 4
@@ -516,7 +327,7 @@ if [ $PLATFORM = "D8" ]; then
 	mysql-client-5.5 iw rfkill \
         libfile-tail-perl libfile-pid-perl libwww-perl \
         dialog wpasupplicant \
-        2>&1 > /var/apt-get-install_1.log
+        2>&1 | tee -a /var/libre_install.log
 
 	# services
 	apt-get install -y --force-yes \
@@ -526,7 +337,7 @@ if [ $PLATFORM = "D8" ]; then
         memcached sogo \
         postfix-mysql dovecot-mysql dovecot-imapd postgrey \
         amavis spamassassin php5-imap fail2ban libsystemd-dev \
-        2>&1 > /var/apt-get-install_2.log
+        2>&1 | tee -a /var/libre_install.log
 
 fi
 	if [ $? -ne 0 ]; then
@@ -593,8 +404,8 @@ if [ ! -e dnscrypt-proxy ]; then
                 exit 5
         fi
 fi
-
 }
+
 
 # ----------------------------------------------
 # This function checks hardware 
@@ -874,6 +685,7 @@ install_modsecurity()
 
         # Downloading the OWASP Core Rule Set
         cd /usr/src/
+        rm -rf owasp-modsecurity-crs
         git clone https://github.com/SpiderLabs/owasp-modsecurity-crs.git
         if [ $? -ne 0 ]; then
                 echo "Error: unable to download modsecurity rules. Exiting ..." | tee -a /var/libre_install.log
