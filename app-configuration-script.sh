@@ -75,7 +75,7 @@ get_variables()
 			echo "Int Interface: $INT_INTERFACE" | tee -a /var/libre_config.log
 		fi 
 	else 
-		echo "Error: i cant find variables of the machine and operating system ,the installation script wasnt installed or failed, please check the Os requirements (at the moment only works in Debian 8 we are ongoing to ubuntu)"  | tee -a /var/libre_config.log
+		echo "Error: Can not find variables of the librerouter"  | tee -a /var/libre_config.log
 		exit 6
 	fi
 }
@@ -258,8 +258,8 @@ get_interfaces()
                         echo 'DNS Servers:' $CDNS
 
         # Getting internal interface name
-        #INT_INTERFACE=`ls /sys/class/net/ | grep -w 'eth0\|eth1\|wlan0\|wlan1' | grep -v "$EXT_INTERFACE" | sed -n '1p'`
-	INT_INTERFACE="br1"
+        INT_INTERFACE=`ls /sys/class/net/ | grep -w 'eth0\|eth1\|wlan0\|wlan1' | grep -v "$EXT_INTERFACE" | sed -n '1p'`
+	#INT_INTERFACE="br1"
         echo "Internal interface: $INT_INTERFACE" | tee -a /var/libre_config.log
 }
 
@@ -408,7 +408,7 @@ if [ "$PROCESSOR" = "Intel" -o "$PROCESSOR" = "AMD" -o "$PROCESSOR" = "ARM" ]; t
 	auto $INT_INTERFACE
 	#allow-hotplug $INT_INTERFACE
 	iface $INT_INTERFACE inet static
-	bridge_ports $INT_INTERFACE wlan1
+	#bridge_ports $INT_INTERFACE wlan1
 	    address 10.0.0.1
 	    netmask 255.255.255.0
             network 10.0.0.0
@@ -3684,6 +3684,16 @@ production:
 
 
 # ---------------------------------------------------------
+# Function to configure webmin
+# ---------------------------------------------------------
+configure_webmin()
+{
+        echo "configuring webmin ..." | tee -a /var/libre_config.log  
+        sudo sed -i "s/ssl=1/ssl=0/" /etc/webmin/miniserv.conf	
+}
+
+
+# ---------------------------------------------------------
 # Function to configure ntop
 # ---------------------------------------------------------
 configure_ntopng()
@@ -3862,7 +3872,8 @@ mv /usr/src/owasp-modsecurity-crs/rules/RESPONSE-950-DATA-LEAKAGES.conf /usr/src
 
 # Rules to not block mlog2waffle to waffle connection
 cat << EOF > /usr/src/owasp-modsecurity-crs/rules/modsecurity_crs_11_waffle.conf
-SecRule REQUEST_FILENAME '^/controller/$' "phase:1,msg:'Match',id:99999,nolog,noauditlog, allow,ctl:RuleEngine=On
+SecRule REQUEST_FILENAME '^/controller/$' "phase:1,msg:'Match',id:99998,nolog,noauditlog, allow,ctl:RuleEngine=On
+SecRule REQUEST_FILENAME '^/yacysearch.html' "phase:1,msg:'Match',id:99999,nolog,noauditlog, allow,ctl:RuleEngine=On
 EOF
 
 cat << EOF > /etc/apache2/mods-enabled/security2.conf
@@ -3903,7 +3914,7 @@ configure_waffle()
       fi    
 
       # Inserting waffle database
-      mysql -u "$MYSQL_USER" -p"$MYSQL_PASS" waffle < /usr/local/waf-fle/extra/waffle.mysql
+      mysql -u root -p"$MYSQL_PASS" waffle < /usr/local/waf-fle/extra/waffle.mysql
       if [ $? -ne 0 ]; then
             echo "Error: Unable to insert waf-fle database. Exiting" | tee -a /var/libre_config.log
             exit 3
@@ -4121,7 +4132,7 @@ Listen 10.0.0.245:443
 Listen 10.0.0.237:80
 Listen 10.0.0.237:443
 
-" /etc/apache2/ports.conf
+" > /etc/apache2/ports.conf
 
 
 # ----------- search.librerouter.net ------------ #
@@ -4669,8 +4680,8 @@ cat << EOF > /etc/apache2/sites-enabled/mailpile.conf
     ErrorLog \${APACHE_LOG_DIR}/email_error.log
     CustomLog \${APACHE_LOG_DIR}/email_access.log combined
     SSLEngine on
-    SSLCertificateFile    /etc/ssl/apache/email_bundle.crt
-    SSLCertificateKeyFile /etc/ssl/apache/email_librerouter_net.key
+    SSLCertificateFile    /etc/ssl/apache/email/email_bundle.crt
+    SSLCertificateKeyFile /etc/ssl/apache/email/email_librerouter_net.key
     ProxyPreserveHost On
     ProxyPass / http://127.0.0.1:33411/
     ProxyPassReverse / http://127.0.0.1:33411/
@@ -4680,33 +4691,33 @@ EOF
 
 # ---------- kibana.librerouter.net ---------- #
 
-# Creating certificate bundle
-rm -rf /etc/ssl/apache/kibana/kibana_bundle.crt
-cat /etc/ssl/apache/kibana/kibana_librerouter_net.crt /etc/ssl/apache/kibana/kibana_librerouter_net.ca-bundle >> /etc/ssl/apache/kibana/kibana_bundle.crt
-
-cat << EOF > /etc/apache2/sites-enabled/kibana.conf
-# kibana.librerouter.net http server
-<VirtualHost 10.0.0.239:80>
-    ServerAdmin admin@librerouter.net
-    ErrorLog \${APACHE_LOG_DIR}/kibana_error.log
-    CustomLog \${APACHE_LOG_DIR}/kibana_access.log combined
-    Redirect "/" "https://kibana.librerouter.net/"
-</VirtualHost>
-
-# kibana.librerouter.net https server
-<VirtualHost 10.0.0.239:443>
-    ServerAdmin admin@librerouter.net
-    ServerName kibana.librerouter.net
-    ErrorLog \${APACHE_LOG_DIR}/kibana_error.log
-    CustomLog \${APACHE_LOG_DIR}/kibana_access.log combined
-    SSLEngine on
-    SSLCertificateFile    /etc/ssl/apache/kibana/kibana_bundle.crt
-    SSLCertificateKeyFile /etc/ssl/apache/kibana/kibana_librerouter_net.key
-    ProxyPreserveHost On
-    ProxyPass / http://127.0.0.1:5601/
-    ProxyPassReverse / http://127.0.0.1:5601/
-</VirtualHost>
-EOF
+## Creating certificate bundle
+#rm -rf /etc/ssl/apache/kibana/kibana_bundle.crt
+#cat /etc/ssl/apache/kibana/kibana_librerouter_net.crt /etc/ssl/apache/kibana/kibana_librerouter_net.ca-bundle >> /etc/ssl/apache/kibana/kibana_bundle.crt
+#
+#cat << EOF > /etc/apache2/sites-enabled/kibana.conf
+## kibana.librerouter.net http server
+#<VirtualHost 10.0.0.239:80>
+#    ServerAdmin admin@librerouter.net
+#    ErrorLog \${APACHE_LOG_DIR}/kibana_error.log
+#    CustomLog \${APACHE_LOG_DIR}/kibana_access.log combined
+#    Redirect "/" "https://kibana.librerouter.net/"
+#</VirtualHost>
+#
+## kibana.librerouter.net https server
+#<VirtualHost 10.0.0.239:443>
+#    ServerAdmin admin@librerouter.net
+#    ServerName kibana.librerouter.net
+#    ErrorLog \${APACHE_LOG_DIR}/kibana_error.log
+#    CustomLog \${APACHE_LOG_DIR}/kibana_access.log combined
+#    SSLEngine on
+#    SSLCertificateFile    /etc/ssl/apache/kibana/kibana_bundle.crt
+#    SSLCertificateKeyFile /etc/ssl/apache/kibana/kibana_librerouter_net.key
+#    ProxyPreserveHost On
+#    ProxyPass / http://127.0.0.1:5601/
+#    ProxyPassReverse / http://127.0.0.1:5601/
+#</VirtualHost>
+#EOF
 
 
 # ---------- postfix.librerouter.net ---------- #
@@ -4818,7 +4829,7 @@ rm -rf /etc/ssl/apache/webconsole/webconsole_bundle.crt
 cat /etc/ssl/apache/webconsole/webconsole_librerouter_net.crt /etc/ssl/apache/webconsole/webconsole_librerouter_net.ca-bundle >> /etc/ssl/apache/webconsole/webconsole_bundle.crt
 
 cat << EOF > /etc/apache2/sites-enabled/webconsole.conf
-# waffle.librerouter.net http server
+# webconsole.librerouter.net http server
 <VirtualHost 10.0.0.237:80>
     ServerAdmin admin@librerouter.net
     ErrorLog \${APACHE_LOG_DIR}/webconsole_error.log
@@ -4826,6 +4837,7 @@ cat << EOF > /etc/apache2/sites-enabled/webconsole.conf
     Redirect "/" "https://webconsole.librerouter.net/"
 </VirtualHost>
 
+# webconsole.librerouter.net https server
 <VirtualHost 10.0.0.237:443>
     ServerAdmin admin@librerouter.net
     ServerName webconsole.librerouter.net
@@ -4836,6 +4848,37 @@ cat << EOF > /etc/apache2/sites-enabled/webconsole.conf
     SSLEngine on
     SSLCertificateFile    /etc/ssl/apache/webconsole/webconsole_bundle.crt
     SSLCertificateKeyFile /etc/ssl/apache/webconsole/webconsole_librerouter_net.key
+</VirtualHost>
+EOF
+
+
+# ---------- trac.librerouter.net ---------- #
+
+# Creating certificate bundle
+rm -rf /etc/ssl/apache/trac/trac_bundle.crt
+cat /etc/ssl/apache/trac/trac_librerouter_net.crt /etc/ssl/apache/trac/trac_librerouter_net.ca-bundle >> /etc/ssl/apache/trac/trac_bundle.crt
+
+cat << EOF > /etc/apache2/sites-enabled/trac.conf
+# trac.librerouter.net http server
+<VirtualHost 10.0.0.248:80>
+    ServerAdmin admin@librerouter.net
+    ErrorLog \${APACHE_LOG_DIR}/trac_error.log
+    CustomLog \${APACHE_LOG_DIR}/trac_access.log combined
+    Redirect "/" "https://trac.librerouter.net/"
+</VirtualHost>
+
+# trac.librerouter.net https server
+<VirtualHost 10.0.0.248:443>
+    ServerAdmin admin@librerouter.net
+    ServerName trac.librerouter.net
+    ErrorLog \${APACHE_LOG_DIR}/trac_error.log
+    CustomLog \${APACHE_LOG_DIR}/trac_access.log combined
+    SSLEngine on
+    SSLCertificateFile    /etc/ssl/apache/trac/trac_bundle.crt
+    SSLCertificateKeyFile /etc/ssl/apache/trac/trac_librerouter_net.key
+    ProxyPreserveHost On
+    ProxyPass / http://127.0.0.1:8000/
+    ProxyPassReverse / http://127.0.0.1:8000/
 </VirtualHost>
 EOF
 
@@ -6628,10 +6671,12 @@ configure_roundcube		# Configuring Roundcube service
 
 configure_trac			# Configuring trac service
 configure_redmine		# Configuring redmine service
+configure_webmin                # Configuring webmin service
 configure_ntopng		# Configuring ntop service
 configure_redsocks		# Configuring redsocks proxy server
 configure_prosody		# Configuring prosody xmpp server 
 configure_tomcat		# Configuring tomcat server
+configure_apache		# Configuring apache web server
 check_interfaces		# Checking network interfaces
 check_services			# Checking services 
 configure_suricata		# Configure Suricata service
