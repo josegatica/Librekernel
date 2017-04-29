@@ -872,7 +872,7 @@ suricata -D -c /etc/suricata/suricata.yaml -i lo &
 #/etc/init.d/elasticsearch start
 
 # Start Trac 
-tracd -s -b 127.0.0.1 --port 8000 /opt/trac/libretrac &
+tracd -s -b 127.0.0.1 --port 8000 --auth="*,/opt/trac/libretrac/conf/passwd,librerouter" /opt/trac/libretrac &
 
 # Start Redsocks
 /opt/redsocks/redsocks -c /opt/redsocks/redsocks.conf &
@@ -3184,6 +3184,7 @@ echo "Configuring postfixadmin ..." | tee -a /var/libre_config.log
 
 # Creating database
 echo "Configuring postfixadmin database ..."
+rm -r /var/lib/mysql/mail
 if [ ! -e  /var/lib/mysql/mail ]; then
 	MYSQL_USER="root"
 
@@ -3533,8 +3534,23 @@ if [ "$ARCH" == "x86_64" ]; then
 
 	export LC_ALL=en_US.UTF-8
 	kill -9 `netstat -tulpn | grep 8000 | awk '{print $7}' | awk -F/ '{print $1}'` 2> /dev/null	
-        tracd -s -b 127.0.0.1 --port 8000 /opt/trac/libretrac &
+
+	# Creating password file
+	touch /opt/trac/libretrac/conf/passwd
+
+	# generating passowrd
+	user=admin
+	realm=librerouter
+	TRAC_PASS=`pwgen 10 1`
+        (echo -n "$user:$realm:" && echo -n "$user:$realm:$TRAC_PASS" | md5sum | awk '{print $1}' ) > /opt/trac/libretrac/conf/passwd
+
+	# Set trac admin account
+	trac-admin /opt/trac/libretrac permission add admin TRAC_ADMIN 
+
+	# Run trac service
+        tracd -s -b 127.0.0.1 --port 8000 --auth="*,/opt/trac/libretrac/conf/passwd,librerouter" /opt/trac/libretrac &
 else
+
         echo "Trac configuration is skipped as detected architecture: $ARCH" | tee -a /var/libre_config.log
 fi
 }
@@ -3961,7 +3977,7 @@ configure_apache()
 echo "Configuring apache web server ..." | tee -a /var/libre_config.log
 
 # Removing default configuration
-rm -r /etc/apache2/sites-enabled/000-default.conf
+rm -rf /etc/apache2/sites-enabled/000-default.conf
 
 # Emabling modules
 a2enmod ssl
@@ -6414,14 +6430,14 @@ cat << EOF >> /var/box_services
 |    mailpile         |                (Please Register)                     |
 |    owncloud         |                (Please Register)                     |
 |    redmine          |                (Please Register)                     |
-|    trac             |                (Please Register)                     |
+|    trac             |          admin         |       $TRAC_PASS            |
 |    yacy             |                    (No Need)                         |
 |    ssh              |         (Your machine root login and pass)           |
 |    webmin           |         (Your machine root login and pass)           |
 |    sogo             |                                                      |
 |    glype            |                                                      |
 |    kibana           |                                                      |
-|    webconsole       |         web            |       $WEB_PASS              |  
+|    webconsole       |         web            |       $WEB_PASS            |  
 ------------------------------------------------------------------------------
 EOF
 
