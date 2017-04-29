@@ -4132,6 +4132,10 @@ Listen 10.0.0.245:443
 Listen 10.0.0.237:80
 Listen 10.0.0.237:443
 
+# Glype
+Listen 10.0.0.247:80
+Listen 10.0.0.247:443
+
 " > /etc/apache2/ports.conf
 
 
@@ -4283,6 +4287,7 @@ cat << EOF > /etc/apache2/sites-enabled/glype.conf
     ServerAdmin admin@librerouter.net
     ServerName glype.librerouter.net
     DirectoryIndex index.php index.html index.htm
+    DocumentRoot /var/www/glype/
     ErrorLog \${APACHE_LOG_DIR}/glype_error.log
     CustomLog \${APACHE_LOG_DIR}/glype_access.log combined
     SSLEngine on
@@ -4882,6 +4887,71 @@ cat << EOF > /etc/apache2/sites-enabled/trac.conf
 EOF
 
 
+# ---------- gitlab.librerouter.net ---------- #
+
+# Creating certificate bundle
+rm -rf /etc/ssl/apache/gitlab/gitlab_bundle.crt
+cat /etc/ssl/apache/gitlab/gitlab_librerouter_net.crt /etc/ssl/apache/gitlab/gitlab_librerouter_net.ca-bundle >> /etc/ssl/apache/gitlab/gitlab_bundle.crt
+
+cat << EOF > /etc/apache2/sites-enabled/gitlab.conf
+# gitlab.librerouter.net http server
+<VirtualHost 10.0.0.247:80>
+    ServerAdmin admin@librerouter.net
+    ErrorLog ${APACHE_LOG_DIR}/gitlab_error.log
+    CustomLog ${APACHE_LOG_DIR}/gitlab_access.log combined
+    Redirect "/" "https://gitlab.librerouter.net/"
+</VirtualHost>
+
+# gitlab.librerouter.net https server
+<VirtualHost 10.0.0.247:443>
+    ServerAdmin admin@librerouter.net
+    ServerName gitlab.librerouter.net
+    ErrorLog ${APACHE_LOG_DIR}/gitlab_error.log
+    CustomLog ${APACHE_LOG_DIR}/gitlab_access.log combined
+    SSLEngine on
+    SSLCertificateFile    /etc/ssl/apache/gitlab/gitlab_bundle.crt
+    SSLCertificateKeyFile /etc/ssl/apache/gitlab/gitlab_librerouter_net.key
+
+  ServerSignature Off
+  ProxyPreserveHost On
+
+  # Ensure that encoded slashes are not decoded but left in their encoded state.
+  # http://doc.gitlab.com/ce/api/projects.html#get-single-project
+  AllowEncodedSlashes NoDecode
+
+  <Location />
+    # New authorization commands for apache 2.4 and up
+    # http://httpd.apache.org/docs/2.4/upgrading.html#access
+    Require all granted
+
+    #Allow forwarding to gitlab-workhorse
+    ProxyPassReverse http://127.0.0.1:8081
+    ProxyPassReverse http://gitlab.librerouter.net/
+  </Location>
+
+  # Apache equivalent of nginx try files
+  # http://serverfault.com/questions/290784/what-is-apaches-equivalent-of-nginxs-try-files
+  # http://stackoverflow.com/questions/10954516/apache2-proxypass-for-rails-app-gitlab
+  RewriteEngine on
+
+  #Forward all requests to gitlab-workhorse except existing files like error documents
+  RewriteCond %{DOCUMENT_ROOT}/%{REQUEST_FILENAME} !-f [OR]
+  RewriteCond %{REQUEST_URI} ^/uploads/.*
+  RewriteRule .* http://127.0.0.1:8081%{REQUEST_URI} [P,QSA,NE]
+
+  # needed for downloading attachments
+  DocumentRoot /opt/gitlab/embedded/service/gitlab-rails/public
+
+  #Set up apache error documents, if back end goes down (i.e. 503 error) then a maintenance/deploy page is thrown up.
+  ErrorDocument 404 /404.html
+  ErrorDocument 422 /422.html
+  ErrorDocument 500 /500.html
+  ErrorDocument 502 /502.html
+  ErrorDocument 503 /503.html
+</VirtualHost>
+EOF
+
+
 # Restarting apache
 echo "Restarting apache web server ..." | tee -a /var/libre_config.log
 /etc/init.d/apache2 restart
@@ -5317,6 +5387,7 @@ external_url 'https://gitlab.librerouter.net'
 gitlab_workhorse['auth_backend'] = \"http://localhost:8081\"
 unicorn['port'] = 8081
 nginx['enable'] = false
+web_server['external_users'] = ['www-data']
 " >> /etc/gitlab/gitlab.rb
 
 	# Reconfiguring gitlab 
