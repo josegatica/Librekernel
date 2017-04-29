@@ -121,9 +121,9 @@ Imagine all the important information you have stored on the hard drive of your 
 • Disaster: Your external hard disks fail or stolen. (no disaster recovery)   
 • Privacy: You're at risk of having your data hacked and stolen if it’s not encrypted.
 
-***9. Anonymous administration***
+***9. Anonymous administration webssh and native ssh over tor and i2p***
 
-***10. Intrusion prevention system***
+***10. Intrusion prevention system (including SSL encrypted connections) ***
 
 ***11. Wireless intrusion prevention system***
 
@@ -131,15 +131,23 @@ Imagine all the important information you have stored on the hard drive of your 
 
 ***13. Selfhosted e-mail server***
 
-***14. Web application firewall***
+***14. Web application firewall (including SSL encrypted connections)***
 
 ***15. Anti ads***
 
-***16. Web content filter***
+***16. Web content filter and parental control***
+![web content filtering 1](https://cloud.githubusercontent.com/assets/13025157/25559815/0fe41d7c-2d43-11e7-8be3-c6cfec7e72bb.jpg)
 
-***17. Network antivirus***
+***17. Network antivirus (including SSL encrypted connections)***
+![carving-diagram 1](https://cloud.githubusercontent.com/assets/13025157/25559800/b236bed2-2d42-11e7-8671-93ca1dee06d8.png)
 
-***18. E-mail antispam***
+***18. E-mail antispam and antivirus with TLS enforcement***
+
+![email-security 1](https://cloud.githubusercontent.com/assets/13025157/25559788/2c287506-2d42-11e7-8a8d-abde334731c5.jpg)
+
+![email-gateway-anti-spam 1](https://cloud.githubusercontent.com/assets/13025157/25559787/19e2aca4-2d42-11e7-8071-0bf8ac33bbab.png)
+
+***19. Self autohealthing: Antirootkit,Hardened OS, File Integrity with Host intrusion prevention system sysloggin***
 
 |App|Decentralized|AnonymInsid|Ncryptclientside|Ncryptservrside|PubPrivF2F|ExposepubIP|
 |:---|:---|:---|:---|:---|:---|:---|
