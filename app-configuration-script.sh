@@ -3600,7 +3600,12 @@ production:
 configure_webmin()
 {
         echo "configuring webmin ..." | tee -a /var/libre_config.log  
-        sudo sed -i "s/ssl=1/ssl=0/" /etc/webmin/miniserv.conf	
+        sudo sed -i "s/ssl=1/ssl=0/" /etc/webmin/miniserv.conf
+
+	# Configure webmin to refer webmin.librerouter.net
+        if ! grep "webmin.librerouter.net" /etc/webmin/config 2>&1 > /dev/null; then
+           echo "referers=webmin.librerouter.net" >> /etc/webmin/config
+        fi
 }
 
 
