@@ -4179,7 +4179,7 @@ cat << EOF > /etc/apache2/sites-enabled/easyrtc.conf
     ServerAdmin admin@librerouter.net
     ErrorLog \${APACHE_LOG_DIR}/conference_error.log
     CustomLog \${APACHE_LOG_DIR}/conference_access.log combined
-    Redirect "/" "https://conference.librerouter.net/"
+    Redirect "/" "https://conference.librerouter.net/demos/demo_multiparty.html"
 </VirtualHost>
 
 # conference.librerouter.net https server
@@ -4191,11 +4191,10 @@ cat << EOF > /etc/apache2/sites-enabled/easyrtc.conf
     SSLEngine on
     SSLCertificateFile    /etc/ssl/apache/conference/conference_bundle.crt
     SSLCertificateKeyFile /etc/ssl/apache/conference/conference_librerouter_net.key
-    RedirectMatch ^/$ /demos/demo_multiparty.html
-    # rewrite ^/$ /demos/demo_multiparty.html permanent
+    SSLProxyEngine On
     ProxyPreserveHost On   
-    ProxyPass / http://127.0.0.1:8443/
-    ProxyPassReverse / http://127.0.0.1:8443/
+    ProxyPass / https://127.0.0.1:8443/
+    ProxyPassReverse / https://127.0.0.1:8443/
 </VirtualHost>
 EOF
 
