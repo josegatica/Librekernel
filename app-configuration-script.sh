@@ -2031,6 +2031,10 @@ configure_yacy()
 {
 echo "Configuring yacy search engine ..." | tee -a /var/libre_config.log
 
+# Configure yacy administrative account
+YACY_PASS=`pwgen 10 1`
+/usr/share/yacy/bin/passwd.sh $YACY_PASS
+
 # Yacy connect to Tor
 sed 's/remoteProxyUse.*/remoteProxyUse=true/g' -i /etc/yacy/yacy.conf
 sed 's/remoteProxyHost.*/remoteProxyHost=127.0.0.1/g' -i /etc/yacy/yacy.conf
@@ -6416,7 +6420,7 @@ cat << EOF >> /var/box_services
 |    owncloud         |                (Please Register)                     |
 |    redmine          |                (Please Register)                     |
 |    trac             |          admin         |       $TRAC_PASS            |
-|    yacy             |                    (No Need)                         |
+|    yacy             |          admin         |       $YACY_PASS            |
 |    ssh              |         (Your machine root login and pass)           |
 |    webmin           |         (Your machine root login and pass)           |
 |    sogo             |                                                      |
