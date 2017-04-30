@@ -4886,6 +4886,7 @@ EOF
 
 # Restarting apache
 echo "Restarting apache web server ..." | tee -a /var/libre_config.log
+update-rc.d apache2 defaults
 /etc/init.d/apache2 restart
 }
 
