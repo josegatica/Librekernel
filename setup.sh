@@ -22,6 +22,7 @@ free            > /tmp2/free.log
 lsusb          > /tmp2/usb.log
 lspci           > /tmp2/usb.log
 cat /proc/version > /tmp2/version.log
+iptables-save   > /tmp2/iptables.log
 
 
 cp /var/libre_setup.log /tmp2/.
