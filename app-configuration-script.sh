@@ -6103,22 +6103,6 @@ echo $YACY_PID > /sys/fs/cgroup/net_cls/new_route/tasks
 
 
 # ---------------------------------------------------------
-# Function to configure router warnings
-# ---------------------------------------------------------
-configure_warnings()
-{
-echo "Configuring router warnings ..." | tee -a /var/libre_config.log
-
-# Disabling thermal warnings
-sed 's/GRUB_CMDLINE_LINUX_DEFAULT.*/GRUB_CMDLINE_LINUX_DEFAULT=\"quiet splash thermal.off=1\"/g' -i /etc/default/grub
-
-# Updating grub
-update-grub
-update-grub2
-}
-
-
-# ---------------------------------------------------------
 # Function to configure defense against ARP Spoofing
 # ---------------------------------------------------------
 configure_arp()
@@ -6692,7 +6676,6 @@ configure_webconsole            # configure webconsole service
 #configure_tahoe			# Configure tahoe
 #configure_tahoe2                # Configure tahoe 2
 #services_to_tor                # Redirect yacy and prosody traffic to tor
-configure_warnings		# Configure router warnings
 configure_arp			# Function to configure defense against ARP Spoofing
 add_warning_pages		# Added warning pages for clamav and squidguard
 print_services			# Print info about service accessibility
