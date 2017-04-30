@@ -877,6 +877,9 @@ tracd -s -b 127.0.0.1 --port 8000 --auth="*,/opt/trac/libretrac/conf/passwd,libr
 # Start Redsocks
 /opt/redsocks/redsocks -c /opt/redsocks/redsocks.conf &
 
+# Start mlog2waffle
+mlog2waffl #
+
 exit 0
 EOF
 
@@ -3967,8 +3970,8 @@ cp /usr/local/waf-fle/extra/mlog2waffle/mlog2waffle /usr/sbin/mlog2waffl
 cp /usr/local/waf-fle/extra/mlog2waffle/mlog2waffle.ubuntu /etc/init.d/mlog2waffle
 
 # Configuring sensor information in database
-echo "insert into sensors (`sensor_id`, `name`, `password`, `description`, `type`, `status`, `client_ip_via`) values ('1', 'librerouter', 'admin', 'Main Sensor', '1', 'Enabled', '0')" |  mysql -u root -p"$MYSQL_PASS" waffle
-echo "insert into sensors_type (`type`, `Description`) values ('1', 'ModSecurity Apache')" |  mysql -u root -p"$MYSQL_PASS" waffle
+echo "insert into sensors (sensor_id, name, password, description, type, status, client_ip_via) values ('1', 'librerouter', 'admin', 'Main Sensor', '1', 'Enabled', '0')" |  mysql -u root -p"$MYSQL_PASS" waffle
+echo "insert into sensors_type (type, Description) values ('1', 'ModSecurity Apache')" |  mysql -u root -p"$MYSQL_PASS" waffle
 
 # Start mlog2waffle
 update-rc.d mlog2waffle defaults 99
