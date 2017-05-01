@@ -3177,6 +3177,7 @@ dovecot      unix   -        n      n       -       -   pipe
   flags=DRhu user=vmail:mail argv=/usr/lib/dovecot/dovecot-lda -d \$(recipient)
 EOF
 
+echo "librerouter.net" > /etc/mailname
 echo "Restarting postfix ..." | tee -a /var/libre_config.log
 service postfix restart | tee -a /var/libre_config.log
 }
