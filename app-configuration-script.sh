@@ -6639,7 +6639,7 @@ configure_ssh			# Configuring ssh server
 configure_tor			# Configuring TOR server
 configure_i2p			# Configuring i2p services
 configure_unbound		# Configuring Unbound DNS server
-#configure_dnscrypt		# Configuring DNSCrypt server
+configure_dnscrypt		# Configuring DNSCrypt server
 configure_yacy			# Configuring yacy search engine
 configure_friendica		# Configuring Friendica local service
 configure_easyrtc		# Configuring EasyRTC local service
