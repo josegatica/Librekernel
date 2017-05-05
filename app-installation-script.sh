@@ -792,6 +792,31 @@ install_certificates()
 }
 
 
+# -----------------------------------------------
+# Function to install ModSecurity Rules
+# -----------------------------------------------
+install_modsecrules()
+{
+        echo "Installing ModSecurity Rules ..." | tee -a /var/libre_install.log
+        if [ ! -e certs ]; then
+                echo "Downloading ModSecurity Rules ..." | tee -a /var/libre_install.log
+                svn co https://github.com/Librerouter/Librekernel/trunk/ModSecurityRules  
+                if [ $? -ne 0 ]; then
+                        echo "Error: unable to download ModSecurity Rules. Exiting ..." | tee -a /var/libre_install.log
+                        exit 3
+                fi
+        fi
+
+        # Moving ModSecurity Rules to nginx /usr/src/ModSecurityRules directory
+        mkdir -p /usr/src/ModSecurityRules
+        rm -rf /usr/src/ModSecurityRules/*
+        cp -r ModSecurityRules/* /usr/src/ModSecurityRules/
+
+        # Cleanup
+        # rm -rf /usr/src/ModSecurityRules/
+}
+
+
 # ----------------------------------------------
 # Function to install mailpile package
 # ----------------------------------------------
@@ -2407,6 +2432,7 @@ if [ "$PROCESSOR" = "Intel" -o "$PROCESSOR" = "AMD" -o "$PROCESSOR" = "ARM" ]; t
 	install_modsecurity      # Install modsecurity package
 	install_waffle		 # Install modsecurity GUI WAF-FLE package
 	install_certificates	 # Install ssl certificates
+        install_modsecrules      # Install Modsecurity rules
 	install_mailpile	 # Install Mailpile package
 	install_easyrtc		 # Install EasyRTC package
 #	install_hublin		 # Install hublin package
