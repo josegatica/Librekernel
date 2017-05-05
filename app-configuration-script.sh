@@ -3811,7 +3811,7 @@ chown -R www-data:www-data /opt/modsecurity/var/audit/
 mv /usr/src/owasp-modsecurity-crs/rules/RESPONSE-950-DATA-LEAKAGES.conf /usr/src/owasp-modsecurity-crs/rules/RESPONSE-950-DATA-LEAKAGES
 
 # Rules to not block mlog2waffle to waffle connection
-cat << EOF > /usr/src/owasp-modsecurity-crs/rules/modsecurity_crs_11_waffle.conf
+cat << EOF > /usr/src/ModSecurityRules/Owasp/rules/modsecurity_crs_11_waffle.conf
 SecRule REQUEST_FILENAME '^/controller/$' "phase:1,msg:'Match',id:99998,nolog,noauditlog, allow,ctl:RuleEngine=On
 SecRule REQUEST_FILENAME '^/yacysearch.html' "phase:1,msg:'Match',id:99999,nolog,noauditlog, allow,ctl:RuleEngine=On
 EOF
@@ -3826,8 +3826,9 @@ cat << EOF > /etc/apache2/mods-enabled/security2.conf
         # will allow for an easy upgrade of THIS file and
         # make your life easier
         IncludeOptional /etc/modsecurity/*.conf
-        Include /usr/src/owasp-modsecurity-crs/crs-setup.conf.example
-        Include /usr/src/owasp-modsecurity-crs/rules/*.conf
+        Include /usr/src/ModSecurityRules/Owasp/crs-setup.conf
+        Include /usr/src/ModSecurityRules/Owasp/rules/*.conf
+        Include /usr/src/ModSecurityRules/Comodo/*.conf
 </IfModule>
 EOF
 }
