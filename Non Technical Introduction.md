@@ -1,6 +1,5 @@
 ![librerouter - logo](https://cloud.githubusercontent.com/assets/13025157/14472862/85e49ae0-00f5-11e6-9591-163f1acd5098.png)
 
-<!---The prposal is to let the text of non-technical introduction as long as to line 32 (with the first graphic. Then open a second site for a more technical explanation with the contents promised here. Links to the site "technical explanation" would be added in § 30 and 32. Further, the text under "Is it so bad?" may be enriched with some links to the videos posted at the "community cube" site.--->
 # Introduction
 
 ***Who we are***
@@ -39,7 +38,9 @@ Our target group is based on early adopters (people interested in new gadgets), 
 
 ***Ok, I want to know more about Libre Router!***
 
-Grate. In our technical explanation you can delve into the details. You can find a thorough explanation about centralisation, closed source, lack of encription and anonymisation, but also about the convenience of other solutions like decentralised local storage. Further you will find a more explicit description how the technologies implemented in Libre Router work and enable you to deal with this problems. You will also find information regarding the advantages of Libre Router vis a vis similar products on the market. Finally, there you can also find out more about the importance of sustainable solutions and how they relate to decentralisation.
+Grate. In the next section you can learn more about the main issues regarding data protection and how the **technical attributes of Libre Router** enable you to solve them in a convenient manner. You will also find information regarding the advantages of Libre Router vis a vis similar products on the market, the importance of sustainable solutions and how they relate to decentralisation. 
+
+<!---our technical explanation you can delve into the details. You can find a thorough explanation about centralisation, closed source, lack of encription and anonymisation, but also about the convenience of other solutions like decentralised local storage. Further you will find a more explicit description how the technologies implemented in Libre Router work and enable you to deal with this problems. You will also find information regarding the advantages of Libre Router vis a vis similar products on the market. Finally, there you can also find out more about the importance of sustainable solutions and how they relate to decentralisation.--->
 
 # Attributes of Libre Router - Take a look at the technical explanation site and don't doubt to contact us for any question you may have!
 
