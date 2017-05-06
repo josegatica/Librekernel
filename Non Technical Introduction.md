@@ -57,12 +57,12 @@ Grate. In our technical explanation you can delve into the details. You can find
 
  This is a list of the technical attributes of the solutions implemented in Libre Router. Together they provides all-out Internet data protection:
 
-1. Secure **open-source operating system** with the hardened kernel version based on Debian Libre and LFS. 
+1. Libre Router runs on a **open-source linux operating system** with a security-hardened version based on Debian Libre and LFS. 
 2. Implementation of alternative, **decentralised** cloud-services at a local level, avoiding big-data-corporations.
-3. **Decentralisation and anonymisation of the Search Engine**, avoiding tracking and providing full control over search-results relevance criteria (also allowing you to filter irrelevant content).
-4. **Filter-connection for the Social Networks** in one single place using decentralized social network Friendica.
+3. **Decentralisation and anonymisation of the Search Engine**, avoiding tracking and providing full control over the relevance criteria of search results  (also allowing you to filter irrelevant content).
+4. **Filter-connection for Social Networks**, whichin allows to check the news-feeds of several social networks in one single place and filter irrelevant content using the decentralized social network _Friendica_.
 5. **Decentralisation of video conferences** based in XMPPoverTOR or WebRTC.
-6. **Secure storage system** with collaborative tools based in TahoeLafs over i2P and blocksnet.
+6. **Secure storage system** with collaborative tools based on TahoeLafs over i2P and blocksnet.
 7. **Transparent e-mail encryption**.
 8. **Anonymous web traffic enforcer Ad-blocker, intrusion prevention system, anti-virus and anti-tracking technology for your web browsing, filtering viruses, exploits, malware, ads, bad reputation IPs, and tasteless content**.
 9. **Protection** from different services that track data transactions like Internet proxy, clamav, surikata proxy, snort unbound DNS lists, iptables, etc.
