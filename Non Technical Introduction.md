@@ -1,7 +1,7 @@
 ![librerouter - logo](https://cloud.githubusercontent.com/assets/13025157/14472862/85e49ae0-00f5-11e6-9591-163f1acd5098.png)
 
 <!---The prposal is to let the text of non-technical introduction as long as to line 32 (with the first graphic. Then open a second site for a more technical explanation with the contents promised here. Links to the site "technical explanation" would be added in § 30 and 32. Further, the text under "Is it so bad?" may be enriched with some links to the videos posted at the "community cube" site.--->
-
+# Introduction
 
 ***Who we are***
 
@@ -11,7 +11,7 @@ Libre Router is a technology-based company dedicated to the development of innov
 
 We all care about data privacy and security to some degree, of course. We also know how far reaching the **ethical implications** of this issues are, specially for people working with sensible data, being an activist or a physician. There are also economical implications: it is  evident to any person running a business how strong data security, strategic knowledge, and value assesment relate to each other. On the other side, in our informational global era it is almost a truism to state how indispensable team-work, communication and in general data flow across regional and transnational boundaries has become. To keep a long story short: **you use internet, right? Then you should care**.
 
-***If the internet functions the way we say, where does the problem reside?***
+***If every body uses the internet the way it functions, where is the problem?***
 
 It is not the way the internet functions, but the way we use it. All the technologies needed to use it productively and simultanously enhance security and privacy are available, even free. 
 
@@ -25,13 +25,13 @@ Sure, there are a lot of standarized security meassures implemented in every com
 
 ***How to work secure, productive, valuable and responsable with sensible data***
 
-Privacy configuration is important when surfing through the internet. To be protected you need the necessary infrastructure: a grid with resilence. Through the community grid the information is encrypted before leaving your computer, then it is encrypted again and distributed in paths. Thus, to read it becomes virtually impossible for anyone but the owner of the device. Further, it is possible to restore all your files from the grid, even if your device is destroyed, still avoiding central storage in third-party clouds. The implementation of your community grid avoids viruses, exploits and protects your malicious internet traffic transparently with no additional button or additional software. 
+Privacy configuration is important when surfing through the internet. To be protected you need the necessary infrastructure: a grid with resilence. Through the _community grid_ (formed by the robust network of our devices) the information is encrypted before leaving your computer, then it is encrypted again and distributed in paths. Thus, to read it becomes virtually impossible for anyone but the owner of the device. Further, it is possible to restore all your files from the grid, even if your device is destroyed, still avoiding central storage in third-party clouds. The implementation of your community grid avoids viruses, exploits and protects you from malicious internet traffic transparently, with no additional button or additional software. 
 
 Know-how, reliability, technical and economical convenience -all of it integrated in a plug and play device- that is the added value we deliver. https://ksr-video.imgix.net/projects/1830782/video-546980-h264_high.mp4
 
 ***Our commitment to sustainability***
 
-Our philosophy at Libre Router is based on the pillars of **sustainable cybersecurity**: **data anonymisation, data decentralisation, e-mail encryption, ad blocking and filtering, indestructible storage, green energy efficiency and social collaboration**. LibreRouter has been developed to be an open source hardware with no malignant backdoors in the used programs, with source code for kernel logic as well as firmware where open source developers will have as much control as possible to bypass the censorship and ensure security for the users.
+Our philosophy at Libre Router is based on the pillars of **sustainable cybersecurity**: **data anonymisation, data decentralisation, e-mail encryption, ad-blocking and filtering, indestructible storage, green energy efficiency and social collaboration**. LibreRouter has been developed to be an open source hardware with no malicious backdoors in the used programs, with transparent source code for kernel logic as well as firmware where open source developers will have as much control as possible to bypass censorship and ensure security for the users.
 
 ***But, what kind of people cares about sustainable cybersecurity?***
 
