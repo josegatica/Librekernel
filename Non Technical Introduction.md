@@ -50,9 +50,7 @@ Take a look, have a happy reading and don't hesitate to contact us for any quest
 
 # Attributes of Libre Router
 
-## Most important issues of data protection
-
-![Issues_Safegaurds](https://github.com/Librerouter/Librekernel/blob/gh-pages/images/14.png)
+![Issues_Safegaurds](https://github.com/Librerouter/Librekernel/blob/gh-pages/images/14-WithTextCorrections.png)
 
 
 ## Our solutions in a nutshell
