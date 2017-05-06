@@ -42,21 +42,20 @@ Grate. In the next section you can learn more about the main issues regarding da
 
 If you are a genuine hardcore geek and want to delve deeply into technical details, we have prepared for you al thoroughly **technical introduction** in the third section.
 
+Take a look, have a happy reading and don't hesitate to contact us for any question you may have!
+
 <!---our technical explanation you can delve into the details. You can find a thorough explanation about centralisation, closed source, lack of encription and anonymisation, but also about the convenience of other solutions like decentralised local storage. Further you will find a more explicit description how the technologies implemented in Libre Router work and enable you to deal with this problems. You will also find information regarding the advantages of Libre Router vis a vis similar products on the market. Finally, there you can also find out more about the importance of sustainable solutions and how they relate to decentralisation.--->
 <!---IMO this paragraph is not relevant for the intended readear, the end user--->
 <!---We are a young and dynamic team with a technical profile in Informatics and Telecommunications Engineering. Actually the company looks for the individual specialization of qualified and motivated professionals in different areas of internet to build an international and sustainable corporate balance.--->
 
-# Attributes of Libre Router - Take a look at the technical explanation site and don't doubt to contact us for any question you may have!
+# Attributes of Libre Router
 
-
-
-
-# Most important issues of data protection
+## Most important issues of data protection
 
 ![Issues_Safegaurds](https://github.com/Librerouter/Librekernel/blob/gh-pages/images/14.png)
 
 
-# Our solutions in a nutshell
+## Our solutions in a nutshell
 
  This is a list of the technical attributes of the solutions implemented in Libre Router. Together they provides all-out Internet data protection:
 
@@ -66,7 +65,7 @@ If you are a genuine hardcore geek and want to delve deeply into technical detai
 4. **Filter-connection for Social Networks**, whichin allows to check the news-feeds of several social networks in one single place and filter irrelevant content using the decentralized social network _Friendica_.
 5. **Decentralisation of video conferences** based on _XMPPoverTOR_ or _WebRTC_.
 6. **Secure storage system** with collaborative tools based on _TahoeLafs_ (encription and decentralisation) over _i2P_ (anonymisation) and _blocksnet_.
-7. **Transparent e-mail encryption**.Encription occurs before e-mails leave your computer and decription only after they reach the local and secure network of the reviever, who the can read the e-mails normally (transparency).  
+7. **Transparent e-mail encryption**.Encription occurs before e-mails leave your computer and decription only after they reach the local and secure network of the reviever, who then can read the e-mails normally (transparency).  
 8. **Encompassing network protection** through anonymous web traffic enforcer, Ad-blocker, intrusion prevention system, anti-virus and anti-tracking technology for your web browsing, filtering viruses, exploits, malware, ads, bad reputation IPs, and tasteless content.
 9. **Protection** from different services that track data transactions like Internet proxy, _clamav_, _surikata proxy_, _snort unbound DNS lists_, iptables, etc.
 10. **Self hosted obfuscated authentication** dissolves the legal relation between the human-user and legal-name, forcing encryption in transport and in rest data.
