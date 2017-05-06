@@ -38,16 +38,18 @@ Our target group is based on early adopters (people interested in new gadgets), 
 
 ***Ok, I want to know more about Libre Router!***
 
-Grate. In the next section you can learn more about the main issues regarding data protection and how the **technical attributes of Libre Router** enable you to solve them in a convenient manner. You will also find information regarding the advantages of Libre Router vis a vis similar products on the market, the importance of sustainable solutions and how they relate to decentralisation. 
+Grate. In the next section you can learn more about the main issues regarding data protection and how the **technical attributes of Libre Router** enable you to solve them in a convenient manner. You will also find information regarding the advantages of Libre Router vis a vis similar products on the market, the importance of sustainable solutions, and how they relate to decentralisation. Don't worry, we will guide through all this with plenty of info-graphics!
+
+If you are a genuine hardcore geek and want to delve deeply into technical details, we have prepared for you al thoroughly **technical introduction** in the third section.
 
 <!---our technical explanation you can delve into the details. You can find a thorough explanation about centralisation, closed source, lack of encription and anonymisation, but also about the convenience of other solutions like decentralised local storage. Further you will find a more explicit description how the technologies implemented in Libre Router work and enable you to deal with this problems. You will also find information regarding the advantages of Libre Router vis a vis similar products on the market. Finally, there you can also find out more about the importance of sustainable solutions and how they relate to decentralisation.--->
+<!---IMO this paragraph is not relevant for the intended readear, the end user--->
+<!---We are a young and dynamic team with a technical profile in Informatics and Telecommunications Engineering. Actually the company looks for the individual specialization of qualified and motivated professionals in different areas of internet to build an international and sustainable corporate balance.--->
 
 # Attributes of Libre Router - Take a look at the technical explanation site and don't doubt to contact us for any question you may have!
 
 
 
-<!---IMO this paragraph is not relevant for the intended readear, the end user--->
-<!---We are a young and dynamic team with a technical profile in Informatics and Telecommunications Engineering. Actually the company looks for the individual specialization of qualified and motivated professionals in different areas of internet to build an international and sustainable corporate balance.--->
 
 # Most important issues of data protection
 
