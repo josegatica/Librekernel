@@ -64,10 +64,10 @@ Grate. In our technical explanation you can delve into the details. You can find
 5. **Decentralisation of video conferences** based on _XMPPoverTOR_ or _WebRTC_.
 6. **Secure storage system** with collaborative tools based on _TahoeLafs_ (encription and decentralisation) over _i2P_ (anonymisation) and _blocksnet_.
 7. **Transparent e-mail encryption**.Encription occurs before e-mails leave your computer and decription only after they reach the local and secure network of the reviever, who the can read the e-mails normally (transparency).  
-8. **Anonymous web traffic enforcer Ad-blocker, intrusion prevention system, anti-virus and anti-tracking technology for your web browsing, filtering viruses, exploits, malware, ads, bad reputation IPs, and tasteless content**.
-9. **Protection** from different services that track data transactions like Internet proxy, clamav, surikata proxy, snort unbound DNS lists, iptables, etc.
-10. **Self hosted obfuscated authentication** (dissolves the legal relation between user-human and legal-name), forcing encryption in transport and in rest data.
-11. **Network filtering of metadata** that expose you, like scripts, cookies, browser info, docs meta, etc.
+8. **Encompassing network protection** through anonymous web traffic enforcer, Ad-blocker, intrusion prevention system, anti-virus and anti-tracking technology for your web browsing, filtering viruses, exploits, malware, ads, bad reputation IPs, and tasteless content.
+9. **Protection** from different services that track data transactions like Internet proxy, _clamav_, _surikata proxy_, _snort unbound DNS lists_, iptables, etc.
+10. **Self hosted obfuscated authentication** dissolves the legal relation between the human-user and legal-name, forcing encryption in transport and in rest data.
+11. **Network filtering of metadata** that expose you, like scripts, cookies, browser info, meta-data of files, etc.
 
 
 # Our services in detail
