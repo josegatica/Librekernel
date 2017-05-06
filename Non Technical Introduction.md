@@ -38,7 +38,7 @@ Our target group is based on early adopters (people interested in new gadgets), 
 
 ***Ok, I want to know more about Libre Router!***
 
-Grate. In the next section you can learn more about the main issues regarding data protection and how the **technical attributes of Libre Router** enable you to solve them in a convenient manner. You will also find information regarding the advantages of Libre Router vis a vis similar products on the market, the importance of sustainable solutions, and how they relate to decentralisation. Don't worry, we will guide through all this with plenty of info-graphics!
+Grate. In the next section you can learn more about the main issues regarding data protection and how the **technical attributes of Libre Router** enable you to solve them in a convenient manner. You will also find information regarding the advantages of Libre Router vis a vis similar products on the market, the importance of sustainable solutions, and how they relate to decentralisation. Don't worry, we will guide you through all this with plenty of info-graphics!
 
 If you are a genuine hardcore geek and want to delve deeply into technical details, we have prepared for you al thoroughly **technical introduction** in the third section.
 
