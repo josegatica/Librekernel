@@ -61,9 +61,9 @@ Grate. In our technical explanation you can delve into the details. You can find
 2. Implementation of alternative, **decentralised** cloud-services at a local level, avoiding big-data-corporations.
 3. **Decentralisation and anonymisation of the Search Engine**, avoiding tracking and providing full control over the relevance criteria of search results  (also allowing you to filter irrelevant content).
 4. **Filter-connection for Social Networks**, whichin allows to check the news-feeds of several social networks in one single place and filter irrelevant content using the decentralized social network _Friendica_.
-5. **Decentralisation of video conferences** based in XMPPoverTOR or WebRTC.
-6. **Secure storage system** with collaborative tools based on TahoeLafs over i2P and blocksnet.
-7. **Transparent e-mail encryption**.
+5. **Decentralisation of video conferences** based on _XMPPoverTOR_ or _WebRTC_.
+6. **Secure storage system** with collaborative tools based on _TahoeLafs_ (encription and decentralisation) over _i2P_ (anonymisation) and _blocksnet_.
+7. **Transparent e-mail encryption**.Encription occurs before e-mails leave your computer and decription only after they reach the local and secure network of the reviever, who the can read the e-mails normally (transparency).  
 8. **Anonymous web traffic enforcer Ad-blocker, intrusion prevention system, anti-virus and anti-tracking technology for your web browsing, filtering viruses, exploits, malware, ads, bad reputation IPs, and tasteless content**.
 9. **Protection** from different services that track data transactions like Internet proxy, clamav, surikata proxy, snort unbound DNS lists, iptables, etc.
 10. **Self hosted obfuscated authentication** (dissolves the legal relation between user-human and legal-name), forcing encryption in transport and in rest data.
