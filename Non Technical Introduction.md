@@ -48,18 +48,18 @@ Grate. In our technical explanation you can delve into the details. You can find
 <!---IMO this paragraph is not relevant for the intended readear, the end user--->
 <!---We are a young and dynamic team with a technical profile in Informatics and Telecommunications Engineering. Actually the company looks for the individual specialization of qualified and motivated professionals in different areas of internet to build an international and sustainable corporate balance.--->
 
-***Problem identified***:
+# Most important issues of data protection
 
 ![Issues_Safegaurds](https://github.com/Librerouter/Librekernel/blob/gh-pages/images/14.png)
 
 
-***The solutions: How does Libre Router protect all-out Internet data?***
+# Our solutions in a nutshell
 
-The services of Libre Router have been defined by the set of the following technical attributes:
+ This is a list of the technical attributes of the solutions implemented in Libre Router. Together they provides all-out Internet data protection:
 
-1. Secure **open operating system** with the hardened version based on Debian Libre and LFS. 
-2. Decentralisation of the services you consume from the cloud at local alternatives (making it impossible to apply big data enemy corps.)
-3. **Decentralisation and anonymisation of Search Engine** with admin rights.
+1. Secure **open-source operating system** with the hardened kernel version based on Debian Libre and LFS. 
+2. Implementation of alternative, **decentralised** cloud-services at a local level, avoiding big-data-corporations.
+3. **Decentralisation and anonymisation of the Search Engine**, avoiding tracking and providing full control over search-results relevance criteria (also allowing you to filter irrelevant content).
 4. **Filter-connection for the Social Networks** in one single place using decentralized social network Friendica.
 5. **Decentralisation of video conferences** based in XMPPoverTOR or WebRTC.
 6. **Secure storage system** with collaborative tools based in TahoeLafs over i2P and blocksnet.
@@ -70,7 +70,7 @@ The services of Libre Router have been defined by the set of the following techn
 11. **Network filtering of metadata** that expose you, like scripts, cookies, browser info, docs meta, etc.
 
 
-# Our services 
+# Our services in detail
 
 
 ***1. Decentralised collaboration storage system - Based in OwnCloud***
