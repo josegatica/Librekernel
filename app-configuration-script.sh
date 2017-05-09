@@ -5724,6 +5724,8 @@ cat << EOF > /etc/cron.daily/mat
 #!/bin/bash
 mat /var/www/owncloud/data
 EOF
+
+chmod +x /etc/cron.daily/mat
 }
 
 
