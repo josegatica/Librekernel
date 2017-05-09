@@ -334,7 +334,7 @@ if [ $PLATFORM = "D8" ]; then
         privoxy unbound owncloud isc-dhcp-server \
         yacy c-icap clamav clamav-daemon  squidguard \
 	tor i2p roundcube tinyproxy prosody \
-        memcached sogo webmin \
+        memcached sogo webmin mat \
         postfix-mysql dovecot-mysql dovecot-imapd postgrey \
         amavis spamassassin php5-imap fail2ban libsystemd-dev \
         2>&1 | tee -a /var/libre_install.log
