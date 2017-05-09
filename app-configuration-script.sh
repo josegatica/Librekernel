@@ -5713,6 +5713,21 @@ sed "/\$HOME_DIRECTORY = '';/c\$HOME_DIRECTORY = '/var/www/webconsole/home';" -i
 
 
 # ---------------------------------------------------------
+# Function to configure MAT (Metadata Anonymisation Toolkit)
+# ---------------------------------------------------------
+configure_mat()
+{
+echo "Configuring MAT ..."  | tee -a /var/libre_install.log
+
+# Run cron daily job to remove metadata in owncloud data direcotry
+cat << EOF > /etc/cron.daily/mat
+#!/bin/bash
+mat /var/www/owncloud/data
+EOF
+}
+
+
+# ---------------------------------------------------------
 # Function to configure tahoe
 # ---------------------------------------------------------
 configure_tahoe()
@@ -6687,8 +6702,9 @@ configure_gitlab 		# Configure gitlab servies (only for amd64)
 #configure_snorby		# Configure Snorby
 configure_upnp                  # configure miniupnp
 configure_webconsole            # configure webconsole service
-#configure_tahoe			# Configure tahoe
-#configure_tahoe2                # Configure tahoe 2
+configure_mat                   # configure mat (Metadata Anonymisation Toolkit)      
+#configure_tahoe		# Configure tahoe
+#configure_tahoe2               # Configure tahoe 2
 #services_to_tor                # Redirect yacy and prosody traffic to tor
 configure_arp			# Function to configure defense against ARP Spoofing
 add_warning_pages		# Added warning pages for clamav and squidguard
