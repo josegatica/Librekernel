@@ -798,7 +798,7 @@ install_certificates()
 install_modsecrules()
 {
         echo "Installing ModSecurity Rules ..." | tee -a /var/libre_install.log
-        if [ ! -e certs ]; then
+        if [ ! -e ModSecurityRules ]; then
                 echo "Downloading ModSecurity Rules ..." | tee -a /var/libre_install.log
                 svn co https://github.com/Librerouter/Librekernel/trunk/ModSecurityRules  
                 if [ $? -ne 0 ]; then
