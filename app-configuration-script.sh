@@ -878,7 +878,7 @@ tracd -s -b 127.0.0.1 --port 8000 --auth="*,/opt/trac/libretrac/conf/passwd,libr
 /opt/redsocks/redsocks -c /opt/redsocks/redsocks.conf &
 
 # Start mlog2waffle
-mlog2waffl #
+mlog2waffl &
 
 exit 0
 EOF
