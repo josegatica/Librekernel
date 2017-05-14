@@ -335,7 +335,7 @@ if [ $PLATFORM = "D8" ]; then
         yacy c-icap clamav clamav-daemon  squidguard \
 	tor i2p roundcube tinyproxy prosody \
         memcached sogo webmin mat \
-        postfix-mysql dovecot-mysql dovecot-imapd postgrey \
+        dovecot-mysql dovecot-imapd postgrey \
         amavis spamassassin php5-imap fail2ban libsystemd-dev \
         2>&1 | tee -a /var/libre_install.log
 
@@ -2167,7 +2167,7 @@ install_ntopng()
 install_postfix()
 {
         echo "Installing postfix ..." | tee -a /var/libre_install.log
-        DEBIAN_FRONTEND=noninteractive apt-get -y --force-yes install postfix postfixadmin
+        DEBIAN_FRONTEND=noninteractive apt-get -y --force-yes install postfix postfixadmin postfix-mysql 
         if [ $? -ne 0 ]; then
                 echo "Error: Unable to install postfix. Exiting" | tee -a /var/libre_install.log
                 exit 3
